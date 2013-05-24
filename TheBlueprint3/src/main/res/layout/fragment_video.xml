@@ -8,22 +8,21 @@
 
      <VideoView android:id="@+id/video"
          android:layout_width="match_parent"
-         android:layout_height="0px"
-         android:layout_weight="1"
+         android:layout_height="match_parent"
          android:background="#00FF00"
          />
 
-     <ListView android:id="@id/android:list"
-         android:layout_width="match_parent"
-         android:layout_height="0px"
-         android:layout_weight="1"
-         android:background="#00FF00"
-         android:drawSelectorOnTop="false"/>
+     <!--<ListView android:id="@id/android:list"-->
+         <!--android:layout_width="match_parent"-->
+         <!--android:layout_height="0px"-->
+         <!--android:layout_weight="1"-->
+         <!--android:background="#00FF00"-->
+         <!--android:drawSelectorOnTop="false"/>-->
 
-     <TextView android:id="@id/android:empty"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:background="#FF0000"
-         android:text="No data"/>
+     <!--<TextView android:id="@id/android:empty"-->
+         <!--android:layout_width="match_parent"-->
+         <!--android:layout_height="match_parent"-->
+         <!--android:background="#FF0000"-->
+         <!--android:text="No data"/>-->
 
 </LinearLayout>
