@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="nav_array">
+        <item>Music</item>
+        <item>Videos</item>
+        <item>Tickets</item>
+        <item>Merchandise</item>
+        <item>Games</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Web search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="app_name" >The Blueprint 3
+    </string>
+    <string name="title_song_detail" >Song Detail
+    </string>
+
+</resources>
