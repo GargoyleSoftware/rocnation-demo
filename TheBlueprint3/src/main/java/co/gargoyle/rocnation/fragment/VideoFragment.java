@@ -171,7 +171,8 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
     protected void onPostExecute(Void args) {
       try {
         // Start the MediaController
-        MediaController mediaController = new MediaController(getActivity());
+        //MediaController mediaController = new MediaController(getActivity());
+        MediaController mediaController = new MediaController(getActivity().getApplicationContext());
         mediaController.setAnchorView(mVideoView);
 
         mVideoView.setOnErrorListener(onErrorListener);
