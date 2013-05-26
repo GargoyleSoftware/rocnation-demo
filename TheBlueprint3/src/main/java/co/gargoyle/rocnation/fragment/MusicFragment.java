@@ -10,11 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import co.gargoyle.rocnation.R;
-import co.gargoyle.rocnation.dummy.DummyContent;
 import co.gargoyle.rocnation.model.Song;
 
+import com.activeandroid.widget.ModelAdapter;
 import com.squareup.otto.Bus;
 
 
@@ -50,14 +49,18 @@ public class MusicFragment extends ListFragment {
 		Log.d("songs", songs.toString());
 
 
-		// databaseHelper.openDatabase();
-		// Cursor songs = databaseHelper.getAllSongs();
-
-        setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-                getActivity(),
+		setListAdapter(
+		new ModelAdapter<Song>(
+				getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
-                DummyContent.ITEMS));
+				songs));
+
+        // setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
+        //         getActivity(),
+        //         android.R.layout.simple_list_item_activated_1,
+        //         android.R.id.text1,
+        //         DummyContent.ITEMS));
 
 
 

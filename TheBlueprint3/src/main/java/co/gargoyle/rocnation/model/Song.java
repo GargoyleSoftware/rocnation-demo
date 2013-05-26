@@ -50,4 +50,9 @@ public class Song extends Model {
 			.from(Song.class)
 			.execute();
 	}
+
+	@Override
+	public String toString() {
+		return title;
+	}
 }
