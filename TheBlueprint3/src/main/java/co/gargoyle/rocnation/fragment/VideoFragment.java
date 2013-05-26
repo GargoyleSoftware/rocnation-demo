@@ -68,20 +68,25 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
-    View rootView = inflater.inflate(R.layout.fragment_video, container, false);
-    mVideoView = (VideoView) rootView.findViewById(R.id.video);
+      getActivity().setTitle("Video");
 
-    SurfaceHolder holder = mVideoView.getHolder();
-    holder.addCallback(this);
-    holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+      View rootView = inflater.inflate(R.layout.fragment_video, container, false);
+      //mVideoView = (VideoView) rootView.findViewById(R.id.video);
+      mVideoView = (VideoView) rootView;
+
+      //mVideoView.setVideoPath("http://commonsware.com/misc/test2.3gp");
+      mVideoView.setVideoPath("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4");
+      mVideoView.start();
+
+      // SurfaceHolder holder = mVideoView.getHolder();
+      // holder.addCallback(this);
+      // holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 
-    getActivity().setTitle("Video");
+      // playStreamingVideo();
+      // Execute StreamVideo AsyncTask
 
-    // playStreamingVideo();
-    // Execute StreamVideo AsyncTask
-
-    return rootView;
+      return rootView;
   }
 
   private void playStreamingVideo() {
@@ -176,7 +181,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
         mediaController.setAnchorView(mVideoView);
 
         mVideoView.setOnErrorListener(onErrorListener);
-        mVideoView.setOnInfoListener(onInfoListener);
+        
         mVideoView.setOnPreparedListener(onPreparedListener);
         mVideoView.setOnCompletionListener(onCompletionListener);
 

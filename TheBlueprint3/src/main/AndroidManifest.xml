@@ -4,8 +4,6 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-
-
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
 
     <uses-sdk
@@ -34,11 +32,25 @@
         <activity
             android:name=".activity.SongDetailActivity"
             android:label="@string/title_song_detail"
-            android:parentActivityName=".SongListActivity" >
+
+             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".SongListActivity" />
         </activity>
+
+        <service android:name=".service.MusicService" >
+            <intent-filter>
+                <action android:name="co.gargoyle.rocnation.intent.action.PLAY" />
+                <action android:name="co.gargoyle.rocnation.intent.action.PAUSE" />
+                <action android:name="co.gargoyle.rocnation.intent.action.STOP" />
+                <action android:name="co.gargoyle.rocnation.intent.action.SEEK" />
+
+                <action android:name="co.gargoyle.rocnation.intent.action.NEXT" />
+                <action android:name="co.gargoyle.rocnation.intent.action.PREV" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
