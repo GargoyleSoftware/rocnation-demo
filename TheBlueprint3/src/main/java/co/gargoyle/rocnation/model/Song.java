@@ -23,19 +23,19 @@ public class Song extends Model {
 		super();
 	}
 
-	@Column
+	@Column(name = "title")
 	private String title;
 
-	@Column
+	@Column(name = "artist")
 	private String artist;
 
 	@Column(name = "lyric_json")
 	private String lyricJson;
 
-	@Column
+	@Column(name = "duration")
 	private int duration;
 
-	@Column
+	@Column(name = "track")
 	private int track;
 
 	@Column(name = "audio_url")
