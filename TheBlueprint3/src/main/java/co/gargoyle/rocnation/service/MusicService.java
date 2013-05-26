@@ -6,11 +6,11 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
-import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
@@ -59,7 +59,11 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
         Log.d("service", "onCreate");
 
-        mMediaPlayer = MediaPlayer.create(this, R.raw.jingle);
+        // Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/01-What%20We%20Talkin%20About.mp3");
+        Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/03-DOA.mp3");
+//        mMediaPlayer = MediaPlayer.create(this, R.raw.jingle);
+        mMediaPlayer = MediaPlayer.create(app, uri);
+
         mMediaPlayer.setOnErrorListener(this);
 
         if(mMediaPlayer!= null) {
