@@ -1,5 +1,7 @@
 package co.gargoyle.rocnation.activity;
 
+import javax.inject.Inject;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -25,12 +27,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import co.gargoyle.rocnation.R;
+import co.gargoyle.rocnation.RocApplication;
+import co.gargoyle.rocnation.events.MusicPausedEvent;
+import co.gargoyle.rocnation.events.MusicPlayingEvent;
+import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
 import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
 import co.gargoyle.rocnation.fragment.VideoFragment;
 import co.gargoyle.rocnation.service.MusicService;
+
+import com.squareup.otto.Subscribe;
 
 /**
  * <li><strong>View switches</strong>. A view switch follows the same basic policies as
@@ -57,6 +65,22 @@ public class MainActivity extends Activity {
 
 	private boolean mIsBound = false;
 	private MusicService mServ;
+
+    @Inject
+    com.squareup.otto.Bus bus;
+
+    ////////////////////////////////////////////////////////////
+	// Constructor
+	////////////////////////////////////////////////////////////
+
+    @Inject
+    public MainActivity() {
+    }
+
+    ////////////////////////////////////////////////////////////
+	// ServiceConnection
+	////////////////////////////////////////////////////////////
+
 	private ServiceConnection mServiceConnection = new ServiceConnection() {
 
 		public void onServiceConnected(ComponentName name, IBinder
@@ -94,6 +118,10 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+        RocApplication app = (RocApplication) getApplication();
+        app.getApplicationGraph().inject(this);
+        bus.register(this);
 
 		mTitle = mDrawerTitle = getTitle();
 		mPlanetTitles = getResources().getStringArray(R.array.nav_array);
@@ -291,18 +319,35 @@ public class MainActivity extends Activity {
 	////////////////////////////////////////////////////////////
 
 	View.OnClickListener mOnPlayPressedListener = new View.OnClickListener() {
-
 		@Override
 		public void onClick(View view) {
 			Log.d("activity", "onPlayPressed");
 
-            mServ.resumeMusic();
+            mServ.toggleMusic();
+            //mServ.resumeMusic();
             // mServ.pauseMusic();
             // mServ.stopMusic();
-
-			// Intent music = new Intent();
-			// music.setClass(MainActivity.this, MusicService.class);
-			// startService(music);
 		}
 	};
+
+    ////////////////////////////////////////////////////////////
+	// Otto Subscriptions
+	////////////////////////////////////////////////////////////
+
+    @Subscribe
+    public void musicTimeChanged(MusicTimeChangedEvent event) {
+        Log.d("otto", "musicTimeChanged: " + String.valueOf(event.playbackTime));
+    }
+
+    @Subscribe
+    public void onMusicPlaying(MusicPlayingEvent event) {
+        Log.d("otto", "onMusicPlaying");
+    }
+
+    @Subscribe
+    public void onMusicPaused(MusicPausedEvent event) {
+        Log.d("otto", "onMusicPaused");
+
+    }
+
 }

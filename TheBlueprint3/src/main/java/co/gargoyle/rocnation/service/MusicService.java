@@ -1,5 +1,7 @@
 package co.gargoyle.rocnation.service;
 
+import javax.inject.Inject;
+
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -9,8 +11,13 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 import co.gargoyle.rocnation.R;
+import co.gargoyle.rocnation.RocApplication;
+import co.gargoyle.rocnation.events.MusicPausedEvent;
+import co.gargoyle.rocnation.events.MusicPlayingEvent;
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
+
+    @Inject com.squareup.otto.Bus bus;
 
     private final IBinder mBinder = new ServiceBinder();
     MediaPlayer mMediaPlayer;
@@ -30,8 +37,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     // Constructor
     ////////////////////////////////////////////////////////////
 
-    public MusicService() { 
-    	
+    @Inject
+    public MusicService() {
     }
 
     @Override
@@ -46,6 +53,9 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     @Override
     public void onCreate () {
         super.onCreate();
+
+        RocApplication app = (RocApplication) getApplication();
+        app.getApplicationGraph().inject(this);
 
         Log.d("service", "onCreate");
 
@@ -90,19 +100,35 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     // Play Controls
     ////////////////////////////////////////////////////////////
 
+    public boolean isPlaying() {
+        return mMediaPlayer.isPlaying();
+    }
+
+    public void toggleMusic() {
+        if (isPlaying()) {
+            pauseMusic();
+        } else {
+            resumeMusic();
+        }
+    }
+
     public void pauseMusic() {
         Log.d("service", "pauseMusic");
         if(mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
-            length=mMediaPlayer.getCurrentPosition();
+            length = mMediaPlayer.getCurrentPosition();
+
+            bus.post(new MusicPausedEvent());
         }
     }
 
     public void resumeMusic() {
         Log.d("service", "resumeMusic");
-        if(mMediaPlayer.isPlaying()==false) {
+        if(mMediaPlayer.isPlaying() == false) {
             mMediaPlayer.seekTo(length);
             mMediaPlayer.start();
+
+            bus.post(new MusicPlayingEvent());
         }
     }
 
@@ -111,7 +137,13 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         mMediaPlayer.stop();
         mMediaPlayer.release();
         mMediaPlayer = null;
+
+        bus.post(new MusicPausedEvent());
     }
+
+    ////////////////////////////////////////////////////////////
+    // Callbacks
+    ////////////////////////////////////////////////////////////
 
     public boolean onError(MediaPlayer mp, int what, int extra) {
         Log.d("service", "onError");
