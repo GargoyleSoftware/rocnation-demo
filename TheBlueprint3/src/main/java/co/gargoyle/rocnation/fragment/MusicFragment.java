@@ -1,13 +1,21 @@
 package co.gargoyle.rocnation.fragment;
 
+import java.util.List;
+
+import javax.inject.Inject;
+
 import android.app.ListFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.dummy.DummyContent;
+import co.gargoyle.rocnation.model.Song;
+
+import com.squareup.otto.Bus;
 
 
 
@@ -20,6 +28,12 @@ import co.gargoyle.rocnation.dummy.DummyContent;
  */
 public class MusicFragment extends ListFragment {
 
+	@Inject
+	Bus bus;
+
+	// @Inject DatabaseHelper databaseHelper;
+
+	@Inject
     public MusicFragment() {
     }
 
@@ -31,11 +45,21 @@ public class MusicFragment extends ListFragment {
 
         getActivity().setTitle("Music");
 
+
+		List<Song> songs = Song.getAll();
+		Log.d("songs", songs.toString());
+
+
+		// databaseHelper.openDatabase();
+		// Cursor songs = databaseHelper.getAllSongs();
+
         setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
                 getActivity(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 DummyContent.ITEMS));
+
+
 
         return rootView;
     }

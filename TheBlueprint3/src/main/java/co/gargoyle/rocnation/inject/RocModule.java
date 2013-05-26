@@ -8,8 +8,10 @@ import android.content.Context;
 import android.location.LocationManager;
 import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.activity.MainActivity;
+import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.service.MusicService;
 
+import com.activeandroid.DatabaseHelper;
 import com.squareup.otto.Bus;
 
 import dagger.Module;
@@ -20,16 +22,19 @@ import dagger.Provides;
     injects = {
         MainActivity.class,
         MusicService.class,
+        MusicFragment.class,
     },
     complete = false,
     library = true
 )
 public class RocModule {
   private final RocApplication application;
+  private final DatabaseHelper databaseHelper;
   private final Bus bus = new Bus();
 
   public RocModule(RocApplication application) {
-    this.application = application;
+	  this.application = application;
+	  this.databaseHelper = new DatabaseHelper(application);
   }
 
   /**
@@ -46,5 +51,9 @@ public class RocModule {
 
   @Provides @Singleton Bus provideBus() {
     return bus;
+  }
+
+  @Provides @Singleton DatabaseHelper provideDatabaseHelper() {
+	  return databaseHelper;
   }
 }

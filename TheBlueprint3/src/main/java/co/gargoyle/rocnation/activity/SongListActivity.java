@@ -28,8 +28,6 @@ import co.gargoyle.rocnation.fragment.SongListFragment;
 public class SongListActivity extends FragmentActivity
         implements SongListFragment.Callbacks {
 
-    private boolean mTwoPane;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

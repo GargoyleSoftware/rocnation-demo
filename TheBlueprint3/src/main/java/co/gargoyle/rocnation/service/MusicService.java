@@ -61,7 +61,6 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
         // Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/01-What%20We%20Talkin%20About.mp3");
         Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/03-DOA.mp3");
-//        mMediaPlayer = MediaPlayer.create(this, R.raw.jingle);
         mMediaPlayer = MediaPlayer.create(app, uri);
 
         mMediaPlayer.setOnErrorListener(this);

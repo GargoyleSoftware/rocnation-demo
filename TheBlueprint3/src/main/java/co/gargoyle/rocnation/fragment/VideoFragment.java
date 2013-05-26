@@ -1,41 +1,18 @@
 package co.gargoyle.rocnation.fragment;
 
-import android.view.SurfaceHolder;
+import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.util.Log;
-import android.widget.MediaController;
-import java.util.Locale;
-import java.util.HashMap;
-import java.util.ArrayList;
-import android.view.SurfaceHolder;
-import android.media.MediaPlayer;
-import android.widget.VideoView;
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.ListFragment;
-import android.app.FragmentManager;
-import android.app.SearchManager;
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.content.res.AssetFileDescriptor;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Toast;
-
+import android.widget.MediaController;
+import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 
 
@@ -89,43 +66,20 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
       return rootView;
   }
 
-  private void playStreamingVideo() {
-    // String path="http://www.ted.com/talks/download/video/8584/talk/761";
-    String path1="http://commonsware.com/misc/test2.3gp";
-
-    // String path2 = "https://s3.amazonaws.com/gargoyle/rocnation/video/03-DOA.mp4";
-
-    //String bunny = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-
-
-    Uri uri = Uri.parse(path1);
-
-    mVideoView.setVideoURI(uri);
-    mVideoView.start();
-  }
-
-  private void playAssetVideo() {
-    // SurfaceHolder holder = mVideoView.getHolder();
-    // // holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-    // MediaPlayer player = new MediaPlayer();
-    // player.setDisplay(holder);
-    // AssetFileDescriptor afd;
-    // try {
-    //   afd = getActivity().getAssets().openFd("video/03-DOA.mp4");
-    //   player.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(), afd.getLength());
-    //   player.prepareAsync();
-    //   player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-    //     @Override
-    //     public void onPrepared(MediaPlayer mp) {
-    //       mp.start();
-    //     }
-    //   });
-
-    // } catch (Exception e) {
-    //   e.printStackTrace();
-    // }
-
-  }
+//  private void playStreamingVideo() {
+//    // String path="http://www.ted.com/talks/download/video/8584/talk/761";
+//    String path1="http://commonsware.com/misc/test2.3gp";
+//
+//    // String path2 = "https://s3.amazonaws.com/gargoyle/rocnation/video/03-DOA.mp4";
+//
+//    //String bunny = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//
+//
+//    Uri uri = Uri.parse(path1);
+//
+//    mVideoView.setVideoURI(uri);
+//    mVideoView.start();
+//  }
 
   //public ArrayList<HashMap<String, String>> getPlayList(){
 
@@ -144,12 +98,12 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
   //	return songsList;
   //}
 
-  private String makeAbsolutePath(String relativePath) {
-    String absolutePath = "";
-    // String[] Array of strings, one for each asset. These file names are relative to 'path'. You can open the file by concatenating 'path' and a name in the returned string (via File) and passing that to open().
-
-    return absolutePath;
-  }
+//  private String makeAbsolutePath(String relativePath) {
+//    String absolutePath = "";
+//    // String[] Array of strings, one for each asset. These file names are relative to 'path'. You can open the file by concatenating 'path' and a name in the returned string (via File) and passing that to open().
+//
+//    return absolutePath;
+//  }
 
   // StreamVideo AsyncTask
   private class StreamVideo extends AsyncTask<Void, Void, Void> {
@@ -222,14 +176,16 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
           return false;
       }
   };
-  private MediaPlayer.OnInfoListener onInfoListener = new MediaPlayer.OnInfoListener() {
-
-    @Override
-    public boolean onInfo(MediaPlayer mediaPlayer, int i, int i2) {
-      Log.d("mediaPlayer", String.format("onInfo: %d, %d", i, i2));
-      return false;
-    }
-  };
+  
+//  private MediaPlayer.OnInfoListener onInfoListener = new MediaPlayer.OnInfoListener() {
+//
+//    @Override
+//    public boolean onInfo(MediaPlayer mediaPlayer, int i, int i2) {
+//      Log.d("mediaPlayer", String.format("onInfo: %d, %d", i, i2));
+//      return false;
+//    }
+//  };
+  
   private MediaPlayer.OnCompletionListener onCompletionListener = new MediaPlayer.OnCompletionListener() {
 
     @Override

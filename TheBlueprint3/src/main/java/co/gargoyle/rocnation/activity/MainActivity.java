@@ -57,7 +57,7 @@ public class MainActivity extends Activity {
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 	private Button mPlayButton;
-	private MusicService.ServiceBinder mPlaybackBinder;
+	// private MusicService.ServiceBinder mPlaybackBinder;
 
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
@@ -66,8 +66,8 @@ public class MainActivity extends Activity {
 	private boolean mIsBound = false;
 	private MusicService mServ;
 
-    @Inject
-    com.squareup.otto.Bus bus;
+    @Inject com.squareup.otto.Bus bus;
+    @Inject MusicFragment musicFragment;
 
     ////////////////////////////////////////////////////////////
 	// Constructor
@@ -82,7 +82,6 @@ public class MainActivity extends Activity {
 	////////////////////////////////////////////////////////////
 
 	private ServiceConnection mServiceConnection = new ServiceConnection() {
-
 		public void onServiceConnected(ComponentName name, IBinder
 				binder) {
 			MusicService.ServiceBinder musicBinder = (MusicService.ServiceBinder)binder;
@@ -287,7 +286,8 @@ public class MainActivity extends Activity {
 
 		switch (position) {
 		case 0:
-			fragment = new MusicFragment();
+			//fragment = new MusicFragment();
+			fragment = musicFragment;
 			break;
 		case 1:
 			fragment = new VideoFragment();
