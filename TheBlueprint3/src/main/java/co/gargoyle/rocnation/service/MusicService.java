@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
-import android.net.Uri;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -21,218 +20,224 @@ import co.gargoyle.rocnation.model.Song;
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
 
-    @Inject com.squareup.otto.Bus bus;
+	@Inject com.squareup.otto.Bus bus;
 
-    private final IBinder mBinder = new ServiceBinder();
-    private Handler mHandler = new Handler();;
-    MediaPlayer mMediaPlayer;
-    private int length = 0;
+	private final IBinder mBinder = new ServiceBinder();
+	private Handler mHandler = new Handler();;
+	MediaPlayer mMediaPlayer;
+	private int length = 0;
 
-    ////////////////////////////////////////////////////////////
-    // ServiceBinder
-    ////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+	// ServiceBinder
+	////////////////////////////////////////////////////////////
 
-    public class ServiceBinder extends Binder {
-        public MusicService getService() {
-            return MusicService.this;
-        }
-    }
+	public class ServiceBinder extends Binder {
+		public MusicService getService() {
+			return MusicService.this;
+		}
+	}
 
-    ////////////////////////////////////////////////////////////
-    // Constructor
-    ////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+	// Constructor
+	////////////////////////////////////////////////////////////
 
-    @Inject
-    public MusicService() {
-    }
+	@Inject
+	public MusicService() {
+	}
 
-    @Override
-    public IBinder onBind(Intent intent){
-        return mBinder;
-    }
+	@Override
+	public IBinder onBind(Intent intent){
+		return mBinder;
+	}
 
-    ////////////////////////////////////////////////////////////
-    // Service Lifecyle
-    ////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+	// Service Lifecyle
+	////////////////////////////////////////////////////////////
 
-    @Override
-    public void onCreate () {
-        super.onCreate();
+	@Override
+	public void onCreate () {
+		super.onCreate();
 
-        RocApplication app = (RocApplication) getApplication();
-        app.getApplicationGraph().inject(this);
+		RocApplication app = (RocApplication) getApplication();
+		app.getApplicationGraph().inject(this);
 
-        Log.d("service", "onCreate");
+		Log.d("service", "onCreate");
 
-        // Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/01-What%20We%20Talkin%20About.mp3");
-        Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/03-DOA.mp3");
-        mMediaPlayer = MediaPlayer.create(app, uri);
+		//Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/01-What%20We%20Talkin%20About.mp3");
+		//Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/03-DOA.mp3");
+		//mMediaPlayer = MediaPlayer.create(app, uri);
+		mMediaPlayer = new MediaPlayer();
 
-        mMediaPlayer.setOnErrorListener(this);
+		mMediaPlayer.setOnErrorListener(this);
 
-        if(mMediaPlayer!= null) {
-            mMediaPlayer.setLooping(true);
-            mMediaPlayer.setVolume(100,100);
-        }
+		if(mMediaPlayer!= null) {
+			mMediaPlayer.setLooping(true);
+			mMediaPlayer.setVolume(100,100);
+		}
 
-        mMediaPlayer.setOnErrorListener(new OnErrorListener() {
-            public boolean onError(MediaPlayer mp, int what, int extra) {
-                onError(mMediaPlayer, what, extra);
-                return true;
-            }
-        });
+		mMediaPlayer.setOnErrorListener(new OnErrorListener() {
+			public boolean onError(MediaPlayer mp, int what, int extra) {
+				onError(mMediaPlayer, what, extra);
+				return true;
+			}
+		});
 
-        updateProgressBar();
-    }
+		updateProgressBar();
+	}
 
-    @Override
-    public void onDestroy () {
-        super.onDestroy();
-        Log.d("service", "onDestroy");
-        if(mMediaPlayer != null) {
-            try {
-                mMediaPlayer.stop();
-                mMediaPlayer.release();
-            } finally {
-                mMediaPlayer = null;
-            }
-        }
-    }
+	@Override
+	public void onDestroy () {
+		super.onDestroy();
+		Log.d("service", "onDestroy");
+		if(mMediaPlayer != null) {
+			try {
+				mMediaPlayer.stop();
+				mMediaPlayer.release();
+			} finally {
+				mMediaPlayer = null;
+			}
+		}
+	}
 
-    @Override
-    public int onStartCommand (Intent intent, int flags, int startId) {
-        Log.d("service", "onStartCommand");
-        mMediaPlayer.start();
-        return START_STICKY;
-    }
+	@Override
+	public int onStartCommand (Intent intent, int flags, int startId) {
+		Log.d("service", "onStartCommand");
+		mMediaPlayer.start();
+		return START_STICKY;
+	}
 
-    ////////////////////////////////////////////////////////////
-    // Play Controls
-    ////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+	// Play Controls
+	////////////////////////////////////////////////////////////
 
-    public boolean isPlaying() {
-        return mMediaPlayer.isPlaying();
-    }
+	public boolean isPlaying() {
+		return mMediaPlayer.isPlaying();
+	}
 
-    public void playSong(Song song) throws java.io.IOException {
-      Log.d("service", "playSong: " + song);
+	public void loadSong(Song song) throws java.io.IOException {
+		mMediaPlayer.stop();
+		mMediaPlayer.reset();
 
-      mMediaPlayer.stop();
-      mMediaPlayer.reset();
+		mMediaPlayer.setDataSource(song.audioUrl);
+		mMediaPlayer.prepare();
+
+		long totalDuration = mMediaPlayer.getDuration();
+		bus.post(new MusicTrackChangedEvent(song, totalDuration));
+	}
+
+	public void playSong(Song song) throws java.io.IOException {
+		Log.d("service", "playSong: " + song);
+
+		loadSong(song);
+
+		mMediaPlayer.start();
+
+		bus.post(new MusicPlayingEvent());
+	}
+
+	public void toggleMusic() {
+		if (isPlaying()) {
+			pauseMusic();
+		} else {
+			resumeMusic();
+		}
+	}
+
+	public void pauseMusic() {
+		Log.d("service", "pauseMusic");
+		if(isPlaying()) {
+			mMediaPlayer.pause();
+			length = mMediaPlayer.getCurrentPosition();
+
+			bus.post(new MusicPausedEvent());
+		}
+	}
+
+	public void resumeMusic() {
+		Log.d("service", "resumeMusic");
+		if(isPlaying() == false) {
+			mMediaPlayer.seekTo(length);
+			mMediaPlayer.start();
+
+			bus.post(new MusicPlayingEvent());
+		}
+	}
+
+	public void stopMusic() {
+		Log.d("service", "stopMusic");
+		mMediaPlayer.stop();
+		mMediaPlayer.release();
+		mMediaPlayer = null;
+
+		bus.post(new MusicPausedEvent());
+	}
+
+	public void updateProgressBar() {
+		mHandler.postDelayed(mUpdateTimeTask, 25);
+	}
+
+	public void seek(int targetMillis) {
+		mMediaPlayer.seekTo(targetMillis);
+		// if (isPlaying()) {
+
+		// }
+	}
 
 
-      mMediaPlayer.setDataSource(song.audioUrl);
-      mMediaPlayer.prepare();
-      mMediaPlayer.start();
+	////////////////////////////////////////////////////////////
+	// Bus Events
+	////////////////////////////////////////////////////////////
 
-      long totalDuration = mMediaPlayer.getDuration();
-      bus.post(new MusicTrackChangedEvent(song, totalDuration));
-      bus.post(new MusicPlayingEvent());
-    }
+	// @Subscribe
+	// public void onMusicTrackRequest(MusicTrackRequestEvent event) {
+	// 	Log.d("otto-service", "musicTrackChanged: " + event.song);
 
-    public void toggleMusic() {
-      if (isPlaying()) {
-        pauseMusic();
-      } else {
-        resumeMusic();
-      }
-    }
+	// 	try {
+	// 		playSong(event.song);
+	// 	} catch (IOException e) {
+	// 		// TODO Auto-generated catch block
+	// 		e.printStackTrace();
+	// 	}
+	// }
 
-    public void pauseMusic() {
-      Log.d("service", "pauseMusic");
-      if(isPlaying()) {
-        mMediaPlayer.pause();
-        length = mMediaPlayer.getCurrentPosition();
+	////////////////////////////////////////////////////////////
+	// Callbacks
+	////////////////////////////////////////////////////////////
 
-        bus.post(new MusicPausedEvent());
-      }
-    }
+	public boolean onError(MediaPlayer mp, int what, int extra) {
+		Log.d("service", "onError");
+		Toast.makeText(this, "music player failed", Toast.LENGTH_SHORT).show();
+		if(mMediaPlayer != null) {
+			try {
+				mMediaPlayer.stop();
+				mMediaPlayer.release();
+			} finally {
+				mMediaPlayer = null;
+			}
+		}
+		return false;
+	}
 
-    public void resumeMusic() {
-      Log.d("service", "resumeMusic");
-      if(isPlaying() == false) {
-        mMediaPlayer.seekTo(length);
-        mMediaPlayer.start();
+	////////////////////////////////////////////////////////////
+	// Handlers
+	////////////////////////////////////////////////////////////
 
-        bus.post(new MusicPlayingEvent());
-      }
-    }
+	/**
+	 * Background Runnable thread
+	 * */
+	private Runnable mUpdateTimeTask = new Runnable() {
+		public void run() {
+			if (isPlaying()) {
+				long totalDuration = mMediaPlayer.getDuration();
+				long currentDuration = mMediaPlayer.getCurrentPosition();
 
-    public void stopMusic() {
-      Log.d("service", "stopMusic");
-      mMediaPlayer.stop();
-      mMediaPlayer.release();
-      mMediaPlayer = null;
+				MusicTimeChangedEvent event = new MusicTimeChangedEvent(totalDuration, currentDuration);
+				bus.post(event);
+			}
 
-      bus.post(new MusicPausedEvent());
-    }
-
-    public void updateProgressBar() {
-      mHandler.postDelayed(mUpdateTimeTask, 25);
-    }
-
-    public void seek(int targetMillis) {
-    	mMediaPlayer.seekTo(targetMillis);
-    	// if (isPlaying()) {
-
-    	// }
-    }
-
-
-    ////////////////////////////////////////////////////////////
-    // Bus Events
-    ////////////////////////////////////////////////////////////
-
-    // @Subscribe
-    // public void onMusicTrackRequest(MusicTrackRequestEvent event) {
-    // 	Log.d("otto-service", "musicTrackChanged: " + event.song);
-
-    // 	try {
-    // 		playSong(event.song);
-    // 	} catch (IOException e) {
-    // 		// TODO Auto-generated catch block
-    // 		e.printStackTrace();
-    // 	}
-    // }
-
-    ////////////////////////////////////////////////////////////
-    // Callbacks
-    ////////////////////////////////////////////////////////////
-
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-      Log.d("service", "onError");
-      Toast.makeText(this, "music player failed", Toast.LENGTH_SHORT).show();
-      if(mMediaPlayer != null) {
-        try {
-          mMediaPlayer.stop();
-          mMediaPlayer.release();
-        } finally {
-          mMediaPlayer = null;
-        }
-      }
-      return false;
-    }
-
-    ////////////////////////////////////////////////////////////
-    // Handlers
-    ////////////////////////////////////////////////////////////
-
-    /**
-     * Background Runnable thread
-     * */
-    private Runnable mUpdateTimeTask = new Runnable() {
-      public void run() {
-        if (isPlaying()) {
-          long totalDuration = mMediaPlayer.getDuration();
-          long currentDuration = mMediaPlayer.getCurrentPosition();
-
-          MusicTimeChangedEvent event = new MusicTimeChangedEvent(totalDuration, currentDuration);
-          bus.post(event);
-        }
-
-        // Running this thread after 100 milliseconds
-        mHandler.postDelayed(this, 100);
-      }
-    };
+			// Running this thread after 100 milliseconds
+			mHandler.postDelayed(this, 100);
+		}
+	};
 
 }

@@ -458,7 +458,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
   }
 
   private OnSeekBarChangeListener mSongSeekBarListener = new OnSeekBarChangeListener() {
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
       if (fromUser) {
