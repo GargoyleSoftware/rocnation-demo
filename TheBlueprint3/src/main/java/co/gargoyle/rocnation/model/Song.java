@@ -10,39 +10,30 @@ import com.activeandroid.query.Select;
 @Table(name = "songs")
 public class Song extends Model {
 
-    // public static final String TITLE      = "title";
-    // public static final String ARTIST     = "artist";
-    // public static final String LYRIC_JSON = "lyric_json" ;
-    // public static final String DURATION   = "duration" ;
-    // public static final String TRACK      = "track" ;
-    // public static final String AUDIO_URL  = "audio_url" ;
-    // public static final String VIDEO_URL  = "video_url" ;
-
-
 	public Song() {
 		super();
 	}
 
 	@Column(name = "title")
-	private String title;
+	public String title;
 
 	@Column(name = "artist")
-	private String artist;
+	public String artist;
 
 	@Column(name = "lyric_json")
-	private String lyricJson;
+	public String lyricJson;
 
 	@Column(name = "duration")
-	private int duration;
+	public int duration;
 
 	@Column(name = "track")
-	private int track;
+	public int track;
 
 	@Column(name = "audio_url")
-	private String audioUrl;
+	public String audioUrl;
 
 	@Column(name = "video_url")
-	private String videoUrl;
+	public String videoUrl;
 
 
 	public static List<Song> getAll() {
