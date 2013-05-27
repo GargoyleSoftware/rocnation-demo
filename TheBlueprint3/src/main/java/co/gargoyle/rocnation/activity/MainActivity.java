@@ -1,13 +1,13 @@
 package co.gargoyle.rocnation.activity;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +26,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.RocApplication;
@@ -46,8 +44,11 @@ import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
 import co.gargoyle.rocnation.fragment.VideoFragment;
 import co.gargoyle.rocnation.list.NavAdapter;
+import co.gargoyle.rocnation.model.Song;
+import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
 
+import com.activeandroid.widget.ModelAdapter;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -79,7 +80,7 @@ public class MainActivity extends Activity {
 
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
-	private String[] mPlanetTitles;
+	private String[] mNavTitles;
 
 	private boolean mIsBound = false;
 	private MusicService mServ;
@@ -141,7 +142,7 @@ public class MainActivity extends Activity {
         bus.register(this);
 
         mTitle = mDrawerTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.nav_array);
+        mNavTitles = getResources().getStringArray(R.array.nav_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mNavDrawerList = (ListView) findViewById(R.id.left_drawer);
         mVideoDrawerList = (ListView) findViewById(R.id.right_drawer);
@@ -166,7 +167,15 @@ public class MainActivity extends Activity {
         mNavDrawerList.setAdapter(new NavAdapter(this));
         mNavDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        mVideoDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
+        // mVideoDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mNavTitles));
+		List<Video> videos = Video.getAll();
+        mVideoDrawerList.setAdapter(
+				new ModelAdapter<Video>(
+					this,
+					android.R.layout.simple_list_item_activated_1,
+					android.R.id.text1,
+					videos));
+
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -339,7 +348,7 @@ public class MainActivity extends Activity {
 
 	private void updateSelectedItemAndCloseDrawer(int position) {
 		mNavDrawerList.setItemChecked(position, true);
-		setTitle(mPlanetTitles[position]);
+		setTitle(mNavTitles[position]);
 		mDrawerLayout.closeDrawer(mNavDrawerList);
 	}
 
