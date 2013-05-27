@@ -416,7 +416,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void exitVideoMode() {
-		clearVideo();
+		pauseVideo();
 
 		mVideoFrame.setVisibility(View.GONE);
 
@@ -426,12 +426,13 @@ public class MainActivity extends Activity {
 		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
 	}
 
-	private void clearVideo() {
-		mVideoView.stopPlayback();
+	private void pauseVideo() {
+		mVideoView.pause();
 	}
 
 	private void playVideo(Video video) {
 		// mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
+		mVideoView.stopPlayback();
 		mVideoView.setVideoURI(Uri.parse(video.videoUrl));
 		mVideoView.start();
 	}
