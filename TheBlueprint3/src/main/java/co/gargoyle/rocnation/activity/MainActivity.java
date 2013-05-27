@@ -28,6 +28,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -128,67 +129,72 @@ public class MainActivity extends Activity {
 	////////////////////////////////////////////////////////////
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
         RocApplication app = (RocApplication) getApplication();
         app.getApplicationGraph().inject(this);
         bus.register(this);
 
-		mTitle = mDrawerTitle = getTitle();
-		mPlanetTitles = getResources().getStringArray(R.array.nav_array);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mTitle = mDrawerTitle = getTitle();
+        mPlanetTitles = getResources().getStringArray(R.array.nav_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
-		mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
-		mVideoFrame   = (RelativeLayout) findViewById(R.id.video_frame);
-		mPlayerFrame  = (RelativeLayout) findViewById(R.id.player_frame);
+        mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
+        mVideoFrame   = (RelativeLayout) findViewById(R.id.video_frame);
+        mPlayerFrame  = (RelativeLayout) findViewById(R.id.player_frame);
+
         mVideoView   = (VideoView) findViewById(R.id.top_video);
+        MediaController mediaController = new MediaController(this);
+        mediaController.setAnchorView(mVideoView);
+        // Set video link (mp4 format )
+        mVideoView.setMediaController(mediaController);
 
-		mPlayButton = (Button) findViewById(R.id.play_button);
-		mPlayButton.setOnClickListener(mOnPlayPressedListener);
+        mPlayButton = (Button) findViewById(R.id.play_button);
+        mPlayButton.setOnClickListener(mOnPlayPressedListener);
 
-		// set a custom shadow that overlays the main content when the drawer opens
-		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
-		// set up the drawer's list view with items and click listener
-		//mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
-		mDrawerList.setAdapter(new NavAdapter(this));
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        // set a custom shadow that overlays the main content when the drawer opens
+        mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
+        // set up the drawer's list view with items and click listener
+        //mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
+        mDrawerList.setAdapter(new NavAdapter(this));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		// enable ActionBar app icon to behave as action to toggle nav drawer
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+        // enable ActionBar app icon to behave as action to toggle nav drawer
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setHomeButtonEnabled(true);
 
-		// ActionBarDrawerToggle ties together the the proper interactions
-		// between the sliding drawer and the action bar app icon
-		mDrawerToggle = new ActionBarDrawerToggle(
-				this,                  /* host Activity */
-				mDrawerLayout,         /* DrawerLayout object */
-				R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
-				R.string.drawer_open,  /* "open drawer" description for accessibility */
-				R.string.drawer_close  /* "close drawer" description for accessibility */
-				) {
-			public void onDrawerClosed(View view) {
-				getActionBar().setTitle(mTitle);
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-			}
+        // ActionBarDrawerToggle ties together the the proper interactions
+        // between the sliding drawer and the action bar app icon
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.drawable.ic_drawer,  /* nav drawer image to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description for accessibility */
+                R.string.drawer_close  /* "close drawer" description for accessibility */
+                ) {
+            public void onDrawerClosed(View view) {
+                getActionBar().setTitle(mTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
 
-			public void onDrawerOpened(View drawerView) {
-				getActionBar().setTitle(mDrawerTitle);
-				invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
-			}
-		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
+            public void onDrawerOpened(View drawerView) {
+                getActionBar().setTitle(mDrawerTitle);
+                invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+            }
+        };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-		if (savedInstanceState == null) {
-			selectItem(0);
-		}
+        if (savedInstanceState == null) {
+            selectItem(0);
+        }
 
         doBindService();
 
 
-		//ViewServer.get(this).addWindow(this);
+        //ViewServer.get(this).addWindow(this);
     }
 
 	@Override
@@ -302,7 +308,6 @@ public class MainActivity extends Activity {
 
 			mPlayerFrame.setVisibility(View.GONE);
 			mContentFrame.setVisibility(View.GONE);
-
 
 			mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
 			mVideoView.start();
