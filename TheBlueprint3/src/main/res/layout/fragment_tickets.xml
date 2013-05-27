@@ -9,18 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:adjustViewBounds="true"
-        android:src="@drawable/ticketsview" 
+        android:src="@drawable/tickets_view" 
         android:contentDescription="sexy images"
-        />
-    
-    <TextView
-        
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:adjustViewBounds="true"
-
-        android:text="sexy text"
         />
 
 </LinearLayout>
