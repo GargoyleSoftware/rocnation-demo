@@ -36,3 +36,4 @@ bin/
 /incoming-distributions
 .idea
 *.sublime-*
+node_modules/

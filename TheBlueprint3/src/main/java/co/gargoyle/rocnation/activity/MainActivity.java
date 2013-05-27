@@ -22,7 +22,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -36,6 +35,7 @@ import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
 import co.gargoyle.rocnation.fragment.VideoFragment;
+import co.gargoyle.rocnation.list.NavAdapter;
 import co.gargoyle.rocnation.service.MusicService;
 
 import com.squareup.otto.Subscribe;
@@ -133,7 +133,8 @@ public class MainActivity extends Activity {
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// set up the drawer's list view with items and click listener
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
+		//mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
+		mDrawerList.setAdapter(new NavAdapter(this));
 		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
