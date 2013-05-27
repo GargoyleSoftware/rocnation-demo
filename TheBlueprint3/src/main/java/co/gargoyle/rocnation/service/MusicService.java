@@ -82,6 +82,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		mMediaPlayer = new MediaPlayer();
 
 		mMediaPlayer.setOnErrorListener(this);
+		mMediaPlayer.setOnCompletionListener(mOnCompletionListener);
 
 		if(mMediaPlayer!= null) {
 			mMediaPlayer.setLooping(true);
@@ -227,12 +228,12 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		return mCurrentSong;
 	}
 
-	private int currentSongIndex() {
+	private int getCurrentSongIndex() {
 		return mSongs.indexOf(mCurrentSong);
 	}
 
 	private Song nextTrack() {
-		int currentIndex = currentSongIndex();
+		int currentIndex = getCurrentSongIndex();
 		int nextIndex;
 		if (currentIndex < lastIndexOf(mSongs)) {
 			nextIndex = currentIndex + 1;
@@ -243,7 +244,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	}
 
 	private Song previousTrack() {
-		int currentIndex = currentSongIndex();
+		int currentIndex = getCurrentSongIndex();
 		int nextIndex;
 		if (currentIndex >= 1) {
 			nextIndex = currentIndex - 1;
@@ -254,11 +255,11 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	}
 
 	public void toNextTrack() throws IOException {
-		loadSong(nextTrack());
+		playSong(nextTrack());
 	}
 
 	public void toPreviousTrack() throws IOException {
-		loadSong(previousTrack());
+		playSong(previousTrack());
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -291,6 +292,17 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	////////////////////////////////////////////////////////////
 	// Callbacks
 	////////////////////////////////////////////////////////////
+
+	private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
+		@Override
+		public void onCompletion(MediaPlayer mediaPlayer) {
+			try {
+				toNextTrack();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	};
 
 	public boolean onError(MediaPlayer mp, int what, int extra) {
 		Log.d("service", "onError");
