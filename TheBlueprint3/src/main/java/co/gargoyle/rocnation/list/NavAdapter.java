@@ -13,7 +13,7 @@ public class NavAdapter extends BaseAdapter {
 	private static LayoutInflater inflater = null;
 	private static final int[] NAV_IMAGE_IDS = new int[] { R.drawable.music,
 			R.drawable.videos, R.drawable.concerts, R.drawable.merchandise,
-			};
+			R.drawable.lyrics};
 
 	public NavAdapter(Context context) { 
         inflater = LayoutInflater.from(context);
