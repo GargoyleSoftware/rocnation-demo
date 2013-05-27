@@ -40,6 +40,7 @@
 			android:layout_alignParentBottom="true"
 			android:layout_centerHorizontal="true"
 			android:orientation="horizontal"
+			android:background="@color/red"
 			>
 			<ImageView
 				android:id="@+id/track_icon"
@@ -61,6 +62,7 @@
 
 			<SeekBar
 				android:id="@+id/songProgressBar"
+				android:background="@color/red"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
 				android:layout_centerVertical="true"

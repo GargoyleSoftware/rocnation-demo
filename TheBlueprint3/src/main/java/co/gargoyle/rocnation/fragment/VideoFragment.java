@@ -1,8 +1,6 @@
 package co.gargoyle.rocnation.fragment;
 
 import android.app.Fragment;
-import android.app.ProgressDialog;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,7 +26,7 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
   private VideoView mVideoView;
   // Put in your Video URL here
   // Declare some variables
-  private ProgressDialog mProgressDialog;
+//  private ProgressDialog mProgressDialog;
 
   public VideoFragment() {
   }
@@ -56,35 +54,35 @@ public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
       mVideoView.start();
   }
 
-  private MediaPlayer.OnPreparedListener onPreparedListener = new MediaPlayer.OnPreparedListener() {
-    // Close the progress bar and play the video
-    public void onPrepared(MediaPlayer mp) {
-      Log.d("mediaPlayer", "onPrepared");
+//  private MediaPlayer.OnPreparedListener onPreparedListener = new MediaPlayer.OnPreparedListener() {
+//    // Close the progress bar and play the video
+//    public void onPrepared(MediaPlayer mp) {
+//      Log.d("mediaPlayer", "onPrepared");
+//
+//      getActivity().runOnUiThread(new Runnable(){
+//        public void run(){
+//          mProgressDialog.dismiss();
+//          mVideoView.start();
+//        }
+//      });
+//
+//    }
+//  };
+//  private MediaPlayer.OnErrorListener onErrorListener = new MediaPlayer.OnErrorListener() {
+//
+//      @Override
+//      public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
+//          Log.d("mediaPlayer", String.format("onError: %d, %d", i, i2));
+//          return false;
+//      }
+//  };
 
-      getActivity().runOnUiThread(new Runnable(){
-        public void run(){
-          mProgressDialog.dismiss();
-          mVideoView.start();
-        }
-      });
-
-    }
-  };
-  private MediaPlayer.OnErrorListener onErrorListener = new MediaPlayer.OnErrorListener() {
-
-      @Override
-      public boolean onError(MediaPlayer mediaPlayer, int i, int i2) {
-          Log.d("mediaPlayer", String.format("onError: %d, %d", i, i2));
-          return false;
-      }
-  };
-
-  private MediaPlayer.OnCompletionListener onCompletionListener = new MediaPlayer.OnCompletionListener() {
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-      Log.d("mediaPlayer", "onCompletion");
-    }
-  };
+//  private MediaPlayer.OnCompletionListener onCompletionListener = new MediaPlayer.OnCompletionListener() {
+//    @Override
+//    public void onCompletion(MediaPlayer mediaPlayer) {
+//      Log.d("mediaPlayer", "onCompletion");
+//    }
+//  };
 
   @Override
   public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i2, int i3) {
