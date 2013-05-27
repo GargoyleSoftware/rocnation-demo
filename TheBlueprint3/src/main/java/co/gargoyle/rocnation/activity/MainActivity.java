@@ -20,11 +20,13 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -62,7 +64,8 @@ import com.squareup.otto.Subscribe;
  */
 public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
+	private ListView mNavDrawerList;
+	private ListView mVideoDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	private FrameLayout mContentFrame;
@@ -140,11 +143,13 @@ public class MainActivity extends Activity {
         mTitle = mDrawerTitle = getTitle();
         mPlanetTitles = getResources().getStringArray(R.array.nav_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mNavDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mVideoDrawerList = (ListView) findViewById(R.id.right_drawer);
 
         mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
         mVideoFrame   = (RelativeLayout) findViewById(R.id.video_frame);
         mPlayerFrame  = (RelativeLayout) findViewById(R.id.player_frame);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
 
         mVideoView   = (VideoView) findViewById(R.id.top_video);
         MediaController mediaController = new MediaController(this);
@@ -158,9 +163,10 @@ public class MainActivity extends Activity {
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
         // set up the drawer's list view with items and click listener
-        //mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
-        mDrawerList.setAdapter(new NavAdapter(this));
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mNavDrawerList.setAdapter(new NavAdapter(this));
+        mNavDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mVideoDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -226,8 +232,9 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content view
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mNavDrawerList);
+		//menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+		menu.findItem(R.id.action_video).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -240,16 +247,20 @@ public class MainActivity extends Activity {
 		}
 		// Handle action buttons
 		switch(item.getItemId()) {
-		case R.id.action_websearch:
-			// create intent to perform web search for this planet
-			Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-			intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-			// catch event that there's no activity to handle intent
-			if (intent.resolveActivity(getPackageManager()) != null) {
-				startActivity(intent);
-			} else {
-				Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-			}
+
+		// case R.id.action_websearch:
+		// 	// create intent to perform web search for this planet
+		// 	Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+		// 	intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
+		// 	// catch event that there's no activity to handle intent
+		// 	if (intent.resolveActivity(getPackageManager()) != null) {
+		// 		startActivity(intent);
+		// 	} else {
+		// 		Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+		// 	}
+		// 	return true;
+		case R.id.action_video:
+            mDrawerLayout.openDrawer(Gravity.RIGHT);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -297,7 +308,6 @@ public class MainActivity extends Activity {
 	private void selectItem(int position) {
 		navToPosition(position);
 
-
 		// update selected item and title, then close the drawer
 		updateSelectedItemAndCloseDrawer(position);
 	}
@@ -311,11 +321,15 @@ public class MainActivity extends Activity {
 
 			mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
 			mVideoView.start();
+
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
 		} else {
 			mVideoFrame.setVisibility(View.GONE);
 
 			mPlayerFrame.setVisibility(View.VISIBLE);
 			mContentFrame.setVisibility(View.VISIBLE);
+
+            mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
 
 			// update the main content by replacing fragments
 			Fragment fragment = getFragmentForPosition(position);
@@ -324,9 +338,9 @@ public class MainActivity extends Activity {
 	}
 
 	private void updateSelectedItemAndCloseDrawer(int position) {
-		mDrawerList.setItemChecked(position, true);
+		mNavDrawerList.setItemChecked(position, true);
 		setTitle(mPlanetTitles[position]);
-		mDrawerLayout.closeDrawer(mDrawerList);
+		mDrawerLayout.closeDrawer(mNavDrawerList);
 	}
 
 	private Fragment getFragmentForPosition(int position) {
