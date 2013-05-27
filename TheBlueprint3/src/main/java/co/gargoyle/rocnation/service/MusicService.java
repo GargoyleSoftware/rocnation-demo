@@ -87,7 +87,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
 		mMediaPlayer.setOnErrorListener(new OnErrorListener() {
 			public boolean onError(MediaPlayer mp, int what, int extra) {
-				onError(mMediaPlayer, what, extra);
+				MusicService.this.onError(mMediaPlayer, what, extra);
 				return true;
 			}
 		});
@@ -167,11 +167,21 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
 	public void resumeMusic() {
 		Log.d("service", "resumeMusic");
-		if(isPlaying() == false) {
-			mMediaPlayer.seekTo(length);
-			mMediaPlayer.start();
+		if(mCurrentSong == null) {
+			// this must be first load. let's grab the first track and rock it
+			try {
+				playSong(getFirstSong());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-			bus.post(new MusicPlayingEvent());
+		} else {
+			if(isPlaying() == false) {
+				mMediaPlayer.seekTo(length);
+				mMediaPlayer.start();
+
+				bus.post(new MusicPlayingEvent());
+			}
 		}
 	}
 
@@ -206,7 +216,11 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		return mSongs;
 	}
 
-	public Song getCurrentSong(Song song) {
+	public Song getFirstSong() {
+		return mSongs.get(0);
+	}
+
+	public Song getCurrentSong() {
 		return mCurrentSong;
 	}
 
