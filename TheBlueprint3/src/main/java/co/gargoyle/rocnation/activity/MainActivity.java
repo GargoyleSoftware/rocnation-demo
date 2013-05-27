@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -25,8 +26,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
@@ -59,6 +63,11 @@ public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+
+	private FrameLayout mContentFrame;
+	private VideoView mVideoFrame;
+	private RelativeLayout mPlayerFrame;
+
 	private Button mPlayButton;
 	// private MusicService.ServiceBinder mPlaybackBinder;
 
@@ -130,6 +139,10 @@ public class MainActivity extends Activity {
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+		mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
+		mVideoFrame   = (VideoView) findViewById(R.id.video_frame);
+		mPlayerFrame  = (RelativeLayout) findViewById(R.id.player_frame);
+
 		mPlayButton = (Button) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
 
@@ -170,6 +183,9 @@ public class MainActivity extends Activity {
 		}
 
         doBindService();
+
+
+		//ViewServer.get(this).addWindow(this);
     }
 
 	@Override
@@ -270,13 +286,33 @@ public class MainActivity extends Activity {
 	////////////////////////////////////////////////////////////
 
 	private void selectItem(int position) {
-		// update the main content by replacing fragments
-		Fragment fragment = getFragmentForPosition(position);
+		navToPosition(position);
 
-		swapFragment(fragment);
 
 		// update selected item and title, then close the drawer
 		updateSelectedItemAndCloseDrawer(position);
+	}
+
+	private void navToPosition(int position) {
+		if (position == 1) {
+			mVideoFrame.setVisibility(View.VISIBLE);
+
+			mPlayerFrame.setVisibility(View.GONE);
+			mContentFrame.setVisibility(View.GONE);
+
+
+			mVideoFrame.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
+			mVideoFrame.start();
+		} else {
+			mVideoFrame.setVisibility(View.GONE);
+
+			mPlayerFrame.setVisibility(View.VISIBLE);
+			mContentFrame.setVisibility(View.VISIBLE);
+
+			// update the main content by replacing fragments
+			Fragment fragment = getFragmentForPosition(position);
+			swapFragment(fragment);
+		}
 	}
 
 	private void updateSelectedItemAndCloseDrawer(int position) {
