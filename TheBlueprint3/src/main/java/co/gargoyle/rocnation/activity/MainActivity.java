@@ -65,8 +65,10 @@ public class MainActivity extends Activity {
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	private FrameLayout mContentFrame;
-	private VideoView mVideoFrame;
+	private RelativeLayout mVideoFrame;
 	private RelativeLayout mPlayerFrame;
+
+    private VideoView mVideoView;
 
 	private Button mPlayButton;
 	// private MusicService.ServiceBinder mPlaybackBinder;
@@ -140,8 +142,9 @@ public class MainActivity extends Activity {
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
 		mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
-		mVideoFrame   = (VideoView) findViewById(R.id.video_frame);
+		mVideoFrame   = (RelativeLayout) findViewById(R.id.video_frame);
 		mPlayerFrame  = (RelativeLayout) findViewById(R.id.player_frame);
+        mVideoView   = (VideoView) findViewById(R.id.top_video);
 
 		mPlayButton = (Button) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
@@ -199,7 +202,7 @@ public class MainActivity extends Activity {
 	public void onConfigurationChanged(Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Pass any configuration change to the drawer toggls
-		mDrawerToggle.onConfigurationChanged(newConfig);
+		//mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
 	////////////////////////////////////////////////////////////
@@ -301,8 +304,8 @@ public class MainActivity extends Activity {
 			mContentFrame.setVisibility(View.GONE);
 
 
-			mVideoFrame.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
-			mVideoFrame.start();
+			mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
+			mVideoView.start();
 		} else {
 			mVideoFrame.setVisibility(View.GONE);
 
