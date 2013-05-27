@@ -43,6 +43,7 @@ import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
 import co.gargoyle.rocnation.fragment.VideoFragment;
+import co.gargoyle.rocnation.fragment.LyricsFragment;
 import co.gargoyle.rocnation.list.NavAdapter;
 import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
@@ -372,6 +373,9 @@ public class MainActivity extends Activity {
 			break;
 		case 3:
 			fragment = new MerchandiseFragment();
+			break;
+		case 4:
+			fragment = new LyricsFragment();
 			break;
 		default:
 			fragment = new PlanetFragment();
