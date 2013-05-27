@@ -6,6 +6,7 @@ import java.util.List;
 import co.gargoyle.rocnation.inject.RocModule;
 
 import com.activeandroid.ActiveAndroid;
+import com.rulych.customfont.CustomFont;
 
 import dagger.ObjectGraph;
 
@@ -14,6 +15,9 @@ public class RocApplication extends com.activeandroid.app.Application {
 
 	@Override public void onCreate() {
 		super.onCreate();
+		
+//		String customFontPath = "DINOT-Cond.otf";
+//		CustomFont.setFontsToUse(customFontPath, customFontPath, customFontPath, customFontPath);
 
 		ActiveAndroid.initialize(this);
 		graph = ObjectGraph.create(getModules().toArray());
