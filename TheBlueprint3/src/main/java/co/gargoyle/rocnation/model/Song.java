@@ -41,6 +41,13 @@ public class Song extends Model {
 			.from(Song.class)
 			.execute();
 	}
+	
+	public static Song getByTrack(int trackNumber) {
+		return new Select()
+		.from(Song.class)
+		.where("track = ?", trackNumber)
+		.executeSingle();		
+	}
 
 	@Override
 	public String toString() {
