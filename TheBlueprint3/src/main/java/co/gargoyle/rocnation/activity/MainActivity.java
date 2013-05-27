@@ -31,6 +31,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.RocApplication;
@@ -49,6 +50,7 @@ import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
 
 import com.activeandroid.widget.ModelAdapter;
+import com.androidhive.musicplayer.MusicTimeUtilities;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -76,6 +78,7 @@ public class MainActivity extends Activity {
 	private VideoView mVideoView;
 
 	private ImageButton mPlayButton;
+	private SeekBar mSongProgressBar;
 	// private MusicService.ServiceBinder mPlaybackBinder;
 
 	private CharSequence mDrawerTitle;
@@ -87,8 +90,9 @@ public class MainActivity extends Activity {
 
 	private boolean mVideoMode = false;
 
-	@Inject com.squareup.otto.Bus bus;
-	@Inject MusicFragment musicFragment;
+	@Inject com.squareup.otto.Bus mBus;
+	@Inject MusicFragment mMusicFragment;
+	@Inject MusicTimeUtilities mMusicTimeUtilities;
 
 	////////////////////////////////////////////////////////////
 	// Constructor
@@ -141,7 +145,7 @@ public class MainActivity extends Activity {
 
 		RocApplication app = (RocApplication) getApplication();
 		app.getApplicationGraph().inject(this);
-		bus.register(this);
+		mBus.register(this);
 
 		mTitle = mDrawerTitle = getTitle();
 		mNavTitles = getResources().getStringArray(R.array.nav_array);
@@ -162,6 +166,8 @@ public class MainActivity extends Activity {
 
 		mPlayButton = (ImageButton) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
+
+    mSongProgressBar = (SeekBar) findViewById(R.id.song_progress_bar);
 
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -367,7 +373,7 @@ public class MainActivity extends Activity {
 		switch (position) {
 		case 0:
 			//fragment = new MusicFragment();
-			fragment = musicFragment;
+			fragment = mMusicFragment;
 			break;
 		case 1:
 			fragment = new VideoFragment();
@@ -470,32 +476,43 @@ public class MainActivity extends Activity {
 
 	@Subscribe
 	public void musicTimeChanged(MusicTimeChangedEvent event) {
-		Log.d("otto", "musicTimeChanged: " + String.valueOf(event.playbackTime));
+		Log.d("otto", "musicTimeChanged: " + String.valueOf(event.currentTime));
+
+//		songTotalDurationLabel.setText(""
+//				+ utils.milliSecondsToTimer(event.totalTime));
+//		songCurrentDurationLabel.setText(""
+//				+ utils.milliSecondsToTimer(event.currentTime));
+
+		// Updating progress bar
+		int progress = (int) (mMusicTimeUtilities.getProgressPercentage(event.currentTime,
+				event.totalTime));
+		mSongProgressBar.setProgress(progress);
 	}
 
-	@Subscribe
-	public void onMusicPlaying(MusicPlayingEvent event) {
-		Log.d("otto", "onMusicPlaying");
+    @Subscribe
+    public void onMusicPlaying(MusicPlayingEvent event) {
+      Log.d("otto", "onMusicPlaying");
 
-        updateMusicButton(PlaybackMode.PLAYING);
-	}
+      updateMusicButton(PlaybackMode.PLAYING);
+    }
 
-	@Subscribe
-	public void onMusicPaused(MusicPausedEvent event) {
-		Log.d("otto", "onMusicPaused");
+    @Subscribe
+    public void onMusicPaused(MusicPausedEvent event) {
+      Log.d("otto", "onMusicPaused");
 
-        updateMusicButton(PlaybackMode.PAUSED);
-	}
+      updateMusicButton(PlaybackMode.PAUSED);
+    }
 
-	@Subscribe
-	public void onMusicTrackChanged(MusicTrackChangeEvent event) {
-		Log.d("otto", "musicTrackChanged: " + event.song);
+    @Subscribe
+    public void onMusicTrackChanged(MusicTrackChangeEvent event) {
+      Log.d("otto", "musicTrackChanged: " + event.song);
 
-		try {
-			mServ.playSong(event.song);
-			// updateMusicButton(PlaybackMode.PLAYING);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+      try {
+        mServ.playSong(event.song);
+        // updateMusicButton(PlaybackMode.PLAYING);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
 }

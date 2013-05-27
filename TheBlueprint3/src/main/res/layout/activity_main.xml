@@ -61,7 +61,7 @@
 				<!--/>-->
 
 			<SeekBar
-				android:id="@+id/songProgressBar"
+				android:id="@+id/song_progress_bar"
 				android:background="@color/red"
 				android:layout_width="fill_parent"
 				android:layout_height="wrap_content"
