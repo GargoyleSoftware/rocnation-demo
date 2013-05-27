@@ -2,8 +2,8 @@ package co.gargoyle.rocnation.fragment;
 
 import java.util.Locale;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +30,14 @@ public class PlanetFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.fragment_planet, container, false);
-		int i = getArguments().getInt(ARG_PLANET_NUMBER);
+		Bundle arguments = getArguments();
+    int i;
+		if (arguments != null) {
+			i = getArguments().getInt(ARG_PLANET_NUMBER);
+		} else {
+			i = 0;
+		}
+
 		String planet = getResources().getStringArray(R.array.nav_array)[i];
 
 		int imageId = getResources().getIdentifier(planet.toLowerCase(Locale.getDefault()),

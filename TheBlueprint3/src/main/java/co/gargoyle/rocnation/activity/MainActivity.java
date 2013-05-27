@@ -5,9 +5,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +14,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -67,7 +67,7 @@ import com.squareup.otto.Subscribe;
  * This is the only form of navigation drawer that should be used outside of the root
  * activity of a task.</li>
  */
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 	private DrawerLayout mDrawerLayout;
 	private ListView mNavDrawerList;
 	private ListView mVideoDrawerList;
@@ -401,7 +401,7 @@ public class MainActivity extends Activity {
 	}
 
 	private void swapFragment(Fragment fragment) {
-		FragmentManager fragmentManager = getFragmentManager();
+		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
 
