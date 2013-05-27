@@ -1,0 +1,58 @@
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+
+	android:id="@+id/player_frame"
+	android:layout_width="match_parent"
+	android:layout_height="72dp"
+	android:layout_alignParentBottom="true"
+	android:layout_centerHorizontal="true"
+	android:orientation="horizontal"
+	android:background="@color/red"
+	>
+	<ImageView
+		android:id="@+id/track_icon"
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		android:src="@drawable/ic_launcher"
+		android:layout_alignParentLeft="true"
+		android:layout_centerVertical="true"
+		/>
+
+	<!--<TextView-->
+		<!--android:id="@+id/track_text"-->
+		<!--android:layout_width="wrap_content"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:text="Hello"-->
+		<!--android:layout_centerVertical="true"-->
+		<!--android:layout_centerHorizontal="true"-->
+		<!--/>-->
+
+	<SeekBar
+		android:id="@+id/song_progress_bar"
+		android:background="@color/red"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:layout_centerHorizontal="true"
+		android:layout_toRightOf="@+id/track_icon"
+		android:layout_toLeftOf="@+id/play_button"
+
+		android:paddingRight="20dp"
+		android:paddingLeft="20dp"
+
+		android:layout_marginBottom="20dp"
+		android:thumb="@drawable/player_slider_handle"
+		android:progressDrawable="@drawable/player_slider_bar"
+		android:layout_marginLeft="6dp"
+		android:layout_marginRight="6dp"
+		/>
+
+	<ImageButton
+		android:id="@+id/play_button"
+		android:layout_width="64dp"
+		android:layout_height="64dp"
+		android:src="@drawable/player_play_button"
+		android:layout_alignParentRight="true"
+		android:layout_centerVertical="true"
+		/>
+</RelativeLayout>
