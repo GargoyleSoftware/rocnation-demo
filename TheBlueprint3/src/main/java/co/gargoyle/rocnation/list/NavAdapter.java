@@ -11,8 +11,11 @@ import co.gargoyle.rocnation.R;
 public class NavAdapter extends BaseAdapter {
 
 	private static LayoutInflater inflater = null;
-	private static final int[] NAV_IMAGE_IDS = new int[] { R.drawable.music,
-			R.drawable.videos, R.drawable.concerts, R.drawable.merchandise,
+	private static final int[] NAV_IMAGE_IDS = new int[] { 
+		R.drawable.music,
+			R.drawable.videos, 
+			R.drawable.concerts, 
+			R.drawable.merchandise,
 			R.drawable.lyrics};
 
 	public NavAdapter(Context context) { 
