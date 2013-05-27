@@ -1,7 +1,9 @@
 package co.gargoyle.rocnation.activity;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 import javax.inject.Inject;
 
@@ -18,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -32,6 +36,7 @@ import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.TabHost;
 import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.RocApplication;
@@ -50,8 +55,10 @@ import co.gargoyle.rocnation.fragment.VideoFragment;
 import co.gargoyle.rocnation.list.NavAdapter;
 import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
+import co.gargoyle.rocnation.tabs.PagerAdapter;
+import co.gargoyle.rocnation.tabs.TabFactory;
+import co.gargoyle.rocnation.tabs.TabInfo;
 
-import com.activeandroid.widget.ModelAdapter;
 import com.androidhive.musicplayer.MusicTimeUtilities;
 import com.squareup.otto.Subscribe;
 
@@ -67,15 +74,21 @@ import com.squareup.otto.Subscribe;
  * This is the only form of navigation drawer that should be used outside of the root
  * activity of a task.</li>
  */
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
 	private DrawerLayout mDrawerLayout;
 	private ListView mNavDrawerList;
-	private ListView mVideoDrawerList;
+
+  private TabHost mVideoTabHost;
+	private ViewGroup mVideoDrawer;
+
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	private FrameLayout mContentFrame;
 	private RelativeLayout mVideoFrame;
 	private RelativeLayout mPlayerFrame;
+  private HashMap<String, TabInfo> mVideoTabInfo = new HashMap<String, TabInfo>();
+  private PagerAdapter mVideoPagerAdapter;
+  private ViewPager mVideoViewPager;
 
 	private VideoView mVideoView;
 
@@ -152,8 +165,17 @@ public class MainActivity extends FragmentActivity {
 		mTitle = mDrawerTitle = getTitle();
 		mNavTitles = getResources().getStringArray(R.array.nav_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mNavDrawerList = (ListView) findViewById(R.id.left_drawer);
-		mVideoDrawerList = (ListView) findViewById(R.id.right_drawer);
+		mNavDrawerList = (ListView) findViewById(R.id.nav_drawer);
+
+		mVideoDrawer = (ViewGroup) findViewById(R.id.video_drawer);
+		mVideoTabHost = (TabHost) findViewById(R.id.video_drawer);
+
+		initTabHost(savedInstanceState);
+		initViewPager();
+		//mVideoTabHost.setup();
+
+		//mVideoDrawer = (ViewGroup) findViewById(R.id.video_wrapper);
+//		mVideoList = (ListView) findViewById(R.id.video_list);
 
 		mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
 		mVideoFrame   = (RelativeLayout) findViewById(R.id.video_frame);
@@ -169,7 +191,7 @@ public class MainActivity extends FragmentActivity {
 		mPlayButton = (ImageButton) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
 
-    mSongProgressBar = (SeekBar) findViewById(R.id.song_progress_bar);
+		mSongProgressBar = (SeekBar) findViewById(R.id.song_progress_bar);
 
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -177,15 +199,15 @@ public class MainActivity extends FragmentActivity {
 		mNavDrawerList.setAdapter(new NavAdapter(this));
 		mNavDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-		// mVideoDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mNavTitles));
-		List<Video> videos = Video.getAll();
-		mVideoDrawerList.setAdapter(
-				new ModelAdapter<Video>(
-						this,
-						android.R.layout.simple_list_item_activated_1,
-						android.R.id.text1,
-						videos));
-		mVideoDrawerList.setOnItemClickListener(mVideoDrawerListener);
+//		List<Video> videos = Video.getAll();
+//		mVideoDrawerList.setAdapter(
+//				new ModelAdapter<Video>(
+//						this,
+//						android.R.layout.simple_list_item_activated_1,
+//						android.R.id.text1,
+//						videos));
+//		mVideoDrawerList.setOnItemClickListener(mVideoDrawerListener);
+
 
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
@@ -327,14 +349,14 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position,
                 long id) {
-            @SuppressWarnings("unchecked")
-			ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
-
-            Video video = videoAdapter.getItem(position);
-
-            updateSelectedVideoAndCloseDrawer(position, video);
-
-            playVideo(video);
+//            @SuppressWarnings("unchecked")
+//			ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
+//
+//            Video video = videoAdapter.getItem(position);
+//
+//            updateSelectedVideoAndCloseDrawer(position, video);
+//
+//            playVideo(video);
         }
     };
 
@@ -435,9 +457,9 @@ public class MainActivity extends FragmentActivity {
     ////////////////////////////////////////////////////////////
 
     private void updateSelectedVideoAndCloseDrawer(int position, Video video) {
-        mVideoDrawerList.setItemChecked(position, true);
+//        mVideoDrawerList.setItemChecked(position, true);
         setTitle(video.title);
-        mDrawerLayout.closeDrawer(mVideoDrawerList);
+        mDrawerLayout.closeDrawer(mVideoDrawer);
     }
 
     private void enterVideoMode() {
@@ -537,5 +559,71 @@ public class MainActivity extends FragmentActivity {
       mSongProgressBar.setMax(castedMax);
     }
 
+    ////////////////////////////////////////////////////////////
+    // TabHost
+    ////////////////////////////////////////////////////////////
 
+    /**
+     * Initialise ViewPager
+     */
+    private void initViewPager() {
+
+        List<Fragment> fragments = new Vector<Fragment>();
+        fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
+        fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
+        this.mVideoPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
+
+        this.mVideoViewPager = (ViewPager)super.findViewById(R.id.video_section_pager);
+        this.mVideoViewPager.setAdapter(this.mVideoPagerAdapter);
+        this.mVideoViewPager.setOnPageChangeListener(this);
+    }
+
+    /**
+     * Initialise the Tab Host
+     */
+    private void initTabHost(Bundle args) {
+        mVideoTabHost.setup();
+        TabInfo tabInfo = null;
+        MainActivity.AddTab(this, this.mVideoTabHost, this.mVideoTabHost.newTabSpec("Tab1").setIndicator("Tab 1"), ( tabInfo = new TabInfo("Tab1", PlanetFragment.class, args)));
+        this.mVideoTabInfo.put(tabInfo.tag, tabInfo);
+        MainActivity.AddTab(this, this.mVideoTabHost, this.mVideoTabHost.newTabSpec("Tab2").setIndicator("Tab 2"), ( tabInfo = new TabInfo("Tab2", PlanetFragment.class, args)));
+        this.mVideoTabInfo.put(tabInfo.tag, tabInfo);
+        MainActivity.AddTab(this, this.mVideoTabHost, this.mVideoTabHost.newTabSpec("Tab3").setIndicator("Tab 3"), ( tabInfo = new TabInfo("Tab3", PlanetFragment.class, args)));
+        this.mVideoTabInfo.put(tabInfo.tag, tabInfo);
+        // Default to first tab
+        //this.onTabChanged("Tab1");
+        //
+        mVideoTabHost.setOnTabChangedListener(this);
+    }
+
+    private static void AddTab(MainActivity activity, TabHost tabHost, TabHost.TabSpec tabSpec, TabInfo tabInfo) {
+        // Attach a Tab view factory to the spec
+        tabSpec.setContent(new TabFactory(activity));
+        tabHost.addTab(tabSpec);
+    }
+
+    @Override
+    public void onTabChanged(String tag) {
+        //TabInfo newTab = this.mVideoTabInfo.get(tag);
+        int pos = this.mVideoTabHost.getCurrentTab();
+        this.mVideoViewPager.setCurrentItem(pos);
+    }
+
+	@Override
+	public void onPageScrollStateChanged(int arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPageScrolled(int arg0, float arg1, int arg2) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPageSelected(int position) {
+    mVideoTabHost.setCurrentTab(position);
+	}
 }

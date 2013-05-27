@@ -33,7 +33,7 @@ public class NavAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vi = convertView;
-		if (convertView == null) {
+		if (vi == null) {
 			vi = inflater.inflate(R.layout.row_nav, null);
 		}
 
