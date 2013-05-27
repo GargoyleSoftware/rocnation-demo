@@ -137,14 +137,14 @@
             android:layout_weight="0"
             />
 
-          <TextView
-            android:id="@+id/test_text"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:text="Herro worrd"
-            android:background="@color/maroon"
-            />
+          <!--<TextView-->
+            <!--android:id="@+id/test_text"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:text="Herro worrd"-->
+            <!--android:background="@color/maroon"-->
+            <!--/>-->
 
           <android.support.v4.view.ViewPager
             android:id="@+id/video_section_pager"

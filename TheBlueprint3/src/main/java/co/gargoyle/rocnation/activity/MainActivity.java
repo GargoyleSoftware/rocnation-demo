@@ -374,8 +374,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private void navToPosition(int position) {
 		if (position == 1) {
 			enterVideoMode();
-
-
 		} else {
 			exitVideoMode();
 
@@ -463,14 +461,14 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     }
 
     private void enterVideoMode() {
-        mVideoFrame.setVisibility(View.VISIBLE);
+      mVideoFrame.setVisibility(View.VISIBLE);
 
-        mPlayerFrame.setVisibility(View.GONE);
-        mContentFrame.setVisibility(View.GONE);
+      mPlayerFrame.setVisibility(View.GONE);
+      mContentFrame.setVisibility(View.GONE);
 
-        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
+      mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
 
-		mVideoMode = true;
+      mVideoMode = true;
     }
 
     private void exitVideoMode() {
@@ -483,7 +481,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
 
-		mVideoMode = false;
+        mVideoMode = false;
     }
 
     private void pauseVideo() {
