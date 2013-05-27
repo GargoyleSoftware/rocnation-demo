@@ -39,13 +39,14 @@ import co.gargoyle.rocnation.constants.PlaybackMode;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
-import co.gargoyle.rocnation.events.MusicTrackChangeEvent;
+import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
+import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
+import co.gargoyle.rocnation.fragment.LyricsFragment;
 import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
 import co.gargoyle.rocnation.fragment.VideoFragment;
-import co.gargoyle.rocnation.fragment.LyricsFragment;
 import co.gargoyle.rocnation.list.NavAdapter;
 import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
@@ -478,20 +479,25 @@ public class MainActivity extends Activity {
     // Otto Subscriptions
     ////////////////////////////////////////////////////////////
 
-	@Subscribe
-	public void musicTimeChanged(MusicTimeChangedEvent event) {
-		Log.d("otto", "musicTimeChanged: " + String.valueOf(event.currentTime));
+    @Subscribe
+    public void musicTimeChanged(MusicTimeChangedEvent event) {
+      Log.d("otto", "musicTimeChanged: " + String.valueOf(event.currentTime));
 
-//		songTotalDurationLabel.setText(""
-//				+ utils.milliSecondsToTimer(event.totalTime));
-//		songCurrentDurationLabel.setText(""
-//				+ utils.milliSecondsToTimer(event.currentTime));
+      //		songTotalDurationLabel.setText(""
+      //				+ utils.milliSecondsToTimer(event.totalTime));
+      //		songCurrentDurationLabel.setText(""
+      //				+ utils.milliSecondsToTimer(event.currentTime));
 
-		// Updating progress bar
-		int progress = (int) (mMusicTimeUtilities.getProgressPercentage(event.currentTime,
-				event.totalTime));
-		mSongProgressBar.setProgress(progress);
-	}
+      // Updating progress bar
+      //int progress = (int) (mMusicTimeUtilities.getProgressPercentage(event.currentTime, event.totalTime));
+
+      //    mSongProgressBar.getMax()
+      //    mSongProgressBar.setMax(event.totalTime)
+
+      int castedTime = (int) event.currentTime;
+      mSongProgressBar.setProgress(castedTime);
+      Log.d("progress", "setting progress to: " + castedTime);
+    }
 
     @Subscribe
     public void onMusicPlaying(MusicPlayingEvent event) {
@@ -508,8 +514,8 @@ public class MainActivity extends Activity {
     }
 
     @Subscribe
-    public void onMusicTrackChanged(MusicTrackChangeEvent event) {
-      Log.d("otto", "musicTrackChanged: " + event.song);
+    public void onMusicTrackRequest(MusicTrackRequestEvent event) {
+      Log.d("otto", "musicTrackRequest: " + event.song);
 
       try {
         mServ.playSong(event.song);
@@ -518,5 +524,18 @@ public class MainActivity extends Activity {
         e.printStackTrace();
       }
     }
+
+    @Subscribe
+    public void onMusicTrackChanged(MusicTrackChangedEvent event) {
+      Log.d("otto", "musicTrackChanged: " + event.song);
+
+      mSongProgressBar.setProgress(0);
+      Log.d("progress", "setting progress to 0");
+
+      int castedMax = (int) event.totalTime;
+      Log.d("progress", "setting max to: " + castedMax);
+      mSongProgressBar.setMax(castedMax);
+    }
+
 
 }

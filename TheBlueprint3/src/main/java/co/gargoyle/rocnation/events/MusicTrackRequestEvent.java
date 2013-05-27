@@ -2,11 +2,11 @@ package co.gargoyle.rocnation.events;
 
 import co.gargoyle.rocnation.model.Song;
 
-public class MusicTrackChangeEvent {
+public class MusicTrackRequestEvent {
 
 	public final Song song;
 
-	public MusicTrackChangeEvent(Song song) {
+	public MusicTrackRequestEvent(Song song) {
 		this.song = song;
 	}
 

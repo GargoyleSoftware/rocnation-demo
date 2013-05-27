@@ -16,10 +16,8 @@ import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
-import co.gargoyle.rocnation.events.MusicTrackChangeEvent;
+import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.model.Song;
-
-import com.squareup.otto.Subscribe;
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
 
@@ -127,6 +125,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
       mMediaPlayer.prepare();
       mMediaPlayer.start();
 
+      long totalDuration = mMediaPlayer.getDuration();
+      bus.post(new MusicTrackChangedEvent(song, totalDuration));
       bus.post(new MusicPlayingEvent());
     }
 
@@ -176,10 +176,17 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     // Bus Events
     ////////////////////////////////////////////////////////////
 
-    @Subscribe
-    public void onMusicTrackChanged(MusicTrackChangeEvent event) {
-      Log.d("otto-service", "musicTrackChanged: " + event.song);
-    }
+    // @Subscribe
+    // public void onMusicTrackRequest(MusicTrackRequestEvent event) {
+    // 	Log.d("otto-service", "musicTrackChanged: " + event.song);
+
+    // 	try {
+    // 		playSong(event.song);
+    // 	} catch (IOException e) {
+    // 		// TODO Auto-generated catch block
+    // 		e.printStackTrace();
+    // 	}
+    // }
 
     ////////////////////////////////////////////////////////////
     // Callbacks

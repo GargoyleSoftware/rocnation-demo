@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import co.gargoyle.rocnation.R;
-import co.gargoyle.rocnation.events.MusicTrackChangeEvent;
+import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.model.Song;
 
 import com.activeandroid.widget.ModelAdapter;
@@ -72,7 +72,7 @@ public class MusicFragment extends ListFragment {
 	}
 
 	private void playSong(Song song) {
-		bus.post(new MusicTrackChangeEvent(song));
+		bus.post(new MusicTrackRequestEvent(song));
 	}
 
 }

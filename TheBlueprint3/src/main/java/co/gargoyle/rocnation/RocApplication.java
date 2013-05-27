@@ -6,7 +6,6 @@ import java.util.List;
 import co.gargoyle.rocnation.inject.RocModule;
 
 import com.activeandroid.ActiveAndroid;
-import com.rulych.customfont.CustomFont;
 
 import dagger.ObjectGraph;
 
