@@ -69,11 +69,11 @@ public class TabsViewPagerFragmentActivity extends FragmentActivity implements T
         mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
         TabInfo tabInfo = null;
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab1").setIndicator("Tab 1"), ( tabInfo = new TabInfo("Tab1", PlanetFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Music").setIndicator("Music Videos"), ( tabInfo = new TabInfo("Music", PlanetFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab2").setIndicator("Tab 2"), ( tabInfo = new TabInfo("Tab2", PlanetFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Interviews").setIndicator("Interviews"), ( tabInfo = new TabInfo("Interviews", PlanetFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Tab3").setIndicator("Tab 3"), ( tabInfo = new TabInfo("Tab3", PlanetFragment.class, args)));
+        TabsViewPagerFragmentActivity.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("Making").setIndicator("Making Of"), ( tabInfo = new TabInfo("Making", PlanetFragment.class, args)));
         this.mapTabInfo.put(tabInfo.tag, tabInfo);
         // Default to first tab
         //this.onTabChanged("Tab1");
