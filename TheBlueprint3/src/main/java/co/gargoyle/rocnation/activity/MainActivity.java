@@ -1,32 +1,37 @@
 package co.gargoyle.rocnation.activity;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.SearchManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.MediaController;
+import android.widget.RelativeLayout;
+import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
@@ -39,8 +44,10 @@ import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
 import co.gargoyle.rocnation.fragment.VideoFragment;
 import co.gargoyle.rocnation.list.NavAdapter;
+import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
 
+import com.activeandroid.widget.ModelAdapter;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -57,30 +64,38 @@ import com.squareup.otto.Subscribe;
  */
 public class MainActivity extends Activity {
 	private DrawerLayout mDrawerLayout;
-	private ListView mDrawerList;
+	private ListView mNavDrawerList;
+	private ListView mVideoDrawerList;
 	private ActionBarDrawerToggle mDrawerToggle;
+
+	private FrameLayout mContentFrame;
+	private RelativeLayout mVideoFrame;
+	private RelativeLayout mPlayerFrame;
+
+	private VideoView mVideoView;
+
 	private Button mPlayButton;
 	// private MusicService.ServiceBinder mPlaybackBinder;
 
 	private CharSequence mDrawerTitle;
 	private CharSequence mTitle;
-	private String[] mPlanetTitles;
+	private String[] mNavTitles;
 
 	private boolean mIsBound = false;
 	private MusicService mServ;
 
-    @Inject com.squareup.otto.Bus bus;
-    @Inject MusicFragment musicFragment;
+	@Inject com.squareup.otto.Bus bus;
+	@Inject MusicFragment musicFragment;
 
-    ////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
 	// Constructor
 	////////////////////////////////////////////////////////////
 
-    @Inject
-    public MainActivity() {
-    }
+	@Inject
+	public MainActivity() {
+	}
 
-    ////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
 	// ServiceConnection
 	////////////////////////////////////////////////////////////
 
@@ -96,21 +111,21 @@ public class MainActivity extends Activity {
 		}
 	};
 
-    void doBindService(){
-        Intent playMusicIntent = new Intent("co.gargoyle.rocnation.intent.action.PLAY");
+	void doBindService(){
+		Intent playMusicIntent = new Intent("co.gargoyle.rocnation.intent.action.PLAY");
 
-        boolean result = bindService(playMusicIntent, mServiceConnection,Context.BIND_AUTO_CREATE);
-        if (result) {
-            mIsBound = true;
-        }
-    }
+		boolean result = bindService(playMusicIntent, mServiceConnection,Context.BIND_AUTO_CREATE);
+		if (result) {
+			mIsBound = true;
+		}
+	}
 
-    void doUnbindService() {
-        if(mIsBound) {
-            unbindService(mServiceConnection);
-            mIsBound = false;
-        }
-    }
+	void doUnbindService() {
+		if(mIsBound) {
+			unbindService(mServiceConnection);
+			mIsBound = false;
+		}
+	}
 
 	////////////////////////////////////////////////////////////
 	// Activity Lifecycle
@@ -121,14 +136,26 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-        RocApplication app = (RocApplication) getApplication();
-        app.getApplicationGraph().inject(this);
-        bus.register(this);
+		RocApplication app = (RocApplication) getApplication();
+		app.getApplicationGraph().inject(this);
+		bus.register(this);
 
 		mTitle = mDrawerTitle = getTitle();
-		mPlanetTitles = getResources().getStringArray(R.array.nav_array);
+		mNavTitles = getResources().getStringArray(R.array.nav_array);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		mNavDrawerList = (ListView) findViewById(R.id.left_drawer);
+		mVideoDrawerList = (ListView) findViewById(R.id.right_drawer);
+
+		mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
+		mVideoFrame   = (RelativeLayout) findViewById(R.id.video_frame);
+		mPlayerFrame  = (RelativeLayout) findViewById(R.id.player_frame);
+		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
+
+		mVideoView   = (VideoView) findViewById(R.id.top_video);
+		MediaController mediaController = new MediaController(this);
+		mediaController.setAnchorView(mVideoView);
+		// Set video link (mp4 format )
+		mVideoView.setMediaController(mediaController);
 
 		mPlayButton = (Button) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
@@ -136,9 +163,19 @@ public class MainActivity extends Activity {
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// set up the drawer's list view with items and click listener
-		//mDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mPlanetTitles));
-		mDrawerList.setAdapter(new NavAdapter(this));
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+		mNavDrawerList.setAdapter(new NavAdapter(this));
+		mNavDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+		// mVideoDrawerList.setAdapter(new ArrayAdapter<String>(this, R.layout.drawer_list_item, mNavTitles));
+		List<Video> videos = Video.getAll();
+		mVideoDrawerList.setAdapter(
+				new ModelAdapter<Video>(
+						this,
+						android.R.layout.simple_list_item_activated_1,
+						android.R.id.text1,
+						videos));
+		mVideoDrawerList.setOnItemClickListener(mVideoDrawerListener);
+
 
 		// enable ActionBar app icon to behave as action to toggle nav drawer
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -169,8 +206,11 @@ public class MainActivity extends Activity {
 			selectItem(0);
 		}
 
-        doBindService();
-    }
+		doBindService();
+
+
+		//ViewServer.get(this).addWindow(this);
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -201,8 +241,9 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content view
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mNavDrawerList);
+		//menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+		menu.findItem(R.id.action_video).setVisible(!drawerOpen);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -215,16 +256,20 @@ public class MainActivity extends Activity {
 		}
 		// Handle action buttons
 		switch(item.getItemId()) {
-		case R.id.action_websearch:
-			// create intent to perform web search for this planet
-			Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-			intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
-			// catch event that there's no activity to handle intent
-			if (intent.resolveActivity(getPackageManager()) != null) {
-				startActivity(intent);
-			} else {
-				Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
-			}
+
+		// case R.id.action_websearch:
+		// 	// create intent to perform web search for this planet
+		// 	Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+		// 	intent.putExtra(SearchManager.QUERY, getActionBar().getTitle());
+		// 	// catch event that there's no activity to handle intent
+		// 	if (intent.resolveActivity(getPackageManager()) != null) {
+		// 		startActivity(intent);
+		// 	} else {
+		// 		Toast.makeText(this, R.string.app_not_available, Toast.LENGTH_LONG).show();
+		// 	}
+		// 	return true;
+		case R.id.action_video:
+			mDrawerLayout.openDrawer(Gravity.RIGHT);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -253,36 +298,61 @@ public class MainActivity extends Activity {
 		mDrawerToggle.syncState();
 	}
 
-	////////////////////////////////////////////////////////////
-	// Listeners
-	////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    // Listeners
+    ////////////////////////////////////////////////////////////
 
-	/* The click listner for ListView in the navigation drawer */
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			selectItem(position);
-		}
-	}
+    /* The click listner for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    private AdapterView.OnItemClickListener mVideoDrawerListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position,
+                long id) {
+            ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
+
+            Video video = videoAdapter.getItem(position);
+
+            updateSelectedVideoAndCloseDrawer(position, video);
+
+            playVideo(video);
+        }
+    };
 
 	////////////////////////////////////////////////////////////
 	// Nav
 	////////////////////////////////////////////////////////////
 
 	private void selectItem(int position) {
-		// update the main content by replacing fragments
-		Fragment fragment = getFragmentForPosition(position);
-
-		swapFragment(fragment);
+		navToPosition(position);
 
 		// update selected item and title, then close the drawer
 		updateSelectedItemAndCloseDrawer(position);
 	}
 
+	private void navToPosition(int position) {
+		if (position == 1) {
+			enterVideoMode();
+
+
+		} else {
+			exitVideoMode();
+
+			// update the main content by replacing fragments
+			Fragment fragment = getFragmentForPosition(position);
+			swapFragment(fragment);
+		}
+	}
+
 	private void updateSelectedItemAndCloseDrawer(int position) {
-		mDrawerList.setItemChecked(position, true);
-		setTitle(mPlanetTitles[position]);
-		mDrawerLayout.closeDrawer(mDrawerList);
+		mNavDrawerList.setItemChecked(position, true);
+		setTitle(mNavTitles[position]);
+		mDrawerLayout.closeDrawer(mNavDrawerList);
 	}
 
 	private Fragment getFragmentForPosition(int position) {
@@ -327,41 +397,82 @@ public class MainActivity extends Activity {
 		public void onClick(View view) {
 			Log.d("activity", "onPlayPressed");
 
-            mServ.toggleMusic();
-            //mServ.resumeMusic();
-            // mServ.pauseMusic();
-            // mServ.stopMusic();
+			mServ.toggleMusic();
+			//mServ.resumeMusic();
+			// mServ.pauseMusic();
+			// mServ.stopMusic();
 		}
 	};
 
-    ////////////////////////////////////////////////////////////
-	// Otto Subscriptions
 	////////////////////////////////////////////////////////////
+	// Video Player
+    ////////////////////////////////////////////////////////////
 
-    @Subscribe
-    public void musicTimeChanged(MusicTimeChangedEvent event) {
-        Log.d("otto", "musicTimeChanged: " + String.valueOf(event.playbackTime));
+    private void updateSelectedVideoAndCloseDrawer(int position, Video video) {
+        mVideoDrawerList.setItemChecked(position, true);
+        setTitle(video.title);
+        mDrawerLayout.closeDrawer(mVideoDrawerList);
     }
 
-    @Subscribe
-    public void onMusicPlaying(MusicPlayingEvent event) {
-        Log.d("otto", "onMusicPlaying");
+    private void enterVideoMode() {
+        mVideoFrame.setVisibility(View.VISIBLE);
+
+        mPlayerFrame.setVisibility(View.GONE);
+        mContentFrame.setVisibility(View.GONE);
+
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
     }
 
-    @Subscribe
-    public void onMusicPaused(MusicPausedEvent event) {
-        Log.d("otto", "onMusicPaused");
+    private void exitVideoMode() {
+        pauseVideo();
 
+        mVideoFrame.setVisibility(View.GONE);
+
+        mPlayerFrame.setVisibility(View.VISIBLE);
+        mContentFrame.setVisibility(View.VISIBLE);
+
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
     }
+
+    private void pauseVideo() {
+        mVideoView.pause();
+    }
+
+    private void playVideo(Video video) {
+        // mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
+        mVideoView.stopPlayback();
+        mVideoView.setVideoURI(Uri.parse(video.videoUrl));
+        mVideoView.start();
+    }
+
+    ////////////////////////////////////////////////////////////
+    // Otto Subscriptions
+    ////////////////////////////////////////////////////////////
 
 	@Subscribe
-    public void onMusicTrackChanged(MusicTrackChangeEvent event) {
-        Log.d("otto", "musicTrackChanged: " + event.song);
+	public void musicTimeChanged(MusicTimeChangedEvent event) {
+		Log.d("otto", "musicTimeChanged: " + String.valueOf(event.playbackTime));
+	}
+
+	@Subscribe
+	public void onMusicPlaying(MusicPlayingEvent event) {
+		Log.d("otto", "onMusicPlaying");
+	}
+
+	@Subscribe
+	public void onMusicPaused(MusicPausedEvent event) {
+		Log.d("otto", "onMusicPaused");
+
+	}
+
+	@Subscribe
+	public void onMusicTrackChanged(MusicTrackChangeEvent event) {
+		Log.d("otto", "musicTrackChanged: " + event.song);
 
 		try {
 			mServ.playSong(event.song);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
+	}
 }
