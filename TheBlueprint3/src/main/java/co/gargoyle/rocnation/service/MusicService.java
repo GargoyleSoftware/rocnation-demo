@@ -140,7 +140,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     public void pauseMusic() {
       Log.d("service", "pauseMusic");
-      if(mMediaPlayer.isPlaying()) {
+      if(isPlaying()) {
         mMediaPlayer.pause();
         length = mMediaPlayer.getCurrentPosition();
 
@@ -150,7 +150,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     public void resumeMusic() {
       Log.d("service", "resumeMusic");
-      if(mMediaPlayer.isPlaying() == false) {
+      if(isPlaying() == false) {
         mMediaPlayer.seekTo(length);
         mMediaPlayer.start();
 
@@ -169,6 +169,13 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
     public void updateProgressBar() {
       mHandler.postDelayed(mUpdateTimeTask, 25);
+    }
+
+    public void seek(int targetMillis) {
+    	mMediaPlayer.seekTo(targetMillis);
+    	// if (isPlaying()) {
+
+    	// }
     }
 
 

@@ -37,6 +37,7 @@ import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TabHost;
 import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
@@ -45,6 +46,7 @@ import co.gargoyle.rocnation.constants.PlaybackMode;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
+import co.gargoyle.rocnation.events.MusicTimeRequestEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.events.VideoRequestEvent;
@@ -107,6 +109,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private MusicService mServ;
 
 	private boolean mVideoMode = false;
+
 
 	@Inject com.squareup.otto.Bus mBus;
 	@Inject MusicFragment mMusicFragment;
@@ -199,6 +202,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
 
 		mSongProgressBar = (SeekBar) findViewById(R.id.song_progress_bar);
+		mSongProgressBar.setOnSeekBarChangeListener(mSongSeekBarListener);
 
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
@@ -452,6 +456,33 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
       mPlayButton.setImageResource(R.drawable.player_pause_button);
     }
   }
+
+  private OnSeekBarChangeListener mSongSeekBarListener = new OnSeekBarChangeListener() {
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+      if (fromUser) {
+        int newTime = progress;
+        //mServ.seek(newTime);
+        //mBus.post(new MusicTimeRequestEvent(newTime));
+      } else {
+
+      }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+      // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+      // TODO Auto-generated method stub
+
+    }
+
+  };
 
   ////////////////////////////////////////////////////////////
   // Video Player
