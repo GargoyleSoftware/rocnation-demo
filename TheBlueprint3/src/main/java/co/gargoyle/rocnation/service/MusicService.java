@@ -168,7 +168,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
     }
 
     public void updateProgressBar() {
-      mHandler.postDelayed(mUpdateTimeTask, 100);
+      mHandler.postDelayed(mUpdateTimeTask, 25);
     }
 
 
