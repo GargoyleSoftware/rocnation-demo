@@ -298,29 +298,31 @@ public class MainActivity extends Activity {
 		mDrawerToggle.syncState();
 	}
 
-	////////////////////////////////////////////////////////////
-	// Listeners
-	////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
+    // Listeners
+    ////////////////////////////////////////////////////////////
 
-	/* The click listner for ListView in the navigation drawer */
-	private class DrawerItemClickListener implements ListView.OnItemClickListener {
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			selectItem(position);
-		}
-	}
+    /* The click listner for ListView in the navigation drawer */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
 
-	private AdapterView.OnItemClickListener mVideoDrawerListener = new AdapterView.OnItemClickListener() {
-		@Override
-		public void onItemClick(AdapterView<?> adapterView, View view, int position,
-				long id) {
-			ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
+    private AdapterView.OnItemClickListener mVideoDrawerListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int position,
+                long id) {
+            ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
 
-			Video video = videoAdapter.getItem(position);
+            Video video = videoAdapter.getItem(position);
 
-			playVideo(video);
-		}
-	};
+            updateSelectedVideoAndCloseDrawer(position, video);
+
+            playVideo(video);
+        }
+    };
 
 	////////////////////////////////////////////////////////////
 	// Nav
@@ -404,42 +406,48 @@ public class MainActivity extends Activity {
 
 	////////////////////////////////////////////////////////////
 	// Video Player
-	////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
 
-	private void enterVideoMode() {
-		mVideoFrame.setVisibility(View.VISIBLE);
+    private void updateSelectedVideoAndCloseDrawer(int position, Video video) {
+        mVideoDrawerList.setItemChecked(position, true);
+        setTitle(video.title);
+        mDrawerLayout.closeDrawer(mVideoDrawerList);
+    }
 
-		mPlayerFrame.setVisibility(View.GONE);
-		mContentFrame.setVisibility(View.GONE);
+    private void enterVideoMode() {
+        mVideoFrame.setVisibility(View.VISIBLE);
 
-		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
-	}
+        mPlayerFrame.setVisibility(View.GONE);
+        mContentFrame.setVisibility(View.GONE);
 
-	private void exitVideoMode() {
-		pauseVideo();
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
+    }
 
-		mVideoFrame.setVisibility(View.GONE);
+    private void exitVideoMode() {
+        pauseVideo();
 
-		mPlayerFrame.setVisibility(View.VISIBLE);
-		mContentFrame.setVisibility(View.VISIBLE);
+        mVideoFrame.setVisibility(View.GONE);
 
-		mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
-	}
+        mPlayerFrame.setVisibility(View.VISIBLE);
+        mContentFrame.setVisibility(View.VISIBLE);
 
-	private void pauseVideo() {
-		mVideoView.pause();
-	}
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
+    }
 
-	private void playVideo(Video video) {
-		// mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
-		mVideoView.stopPlayback();
-		mVideoView.setVideoURI(Uri.parse(video.videoUrl));
-		mVideoView.start();
-	}
+    private void pauseVideo() {
+        mVideoView.pause();
+    }
 
-	////////////////////////////////////////////////////////////
-	// Otto Subscriptions
-	////////////////////////////////////////////////////////////
+    private void playVideo(Video video) {
+        // mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
+        mVideoView.stopPlayback();
+        mVideoView.setVideoURI(Uri.parse(video.videoUrl));
+        mVideoView.start();
+    }
+
+    ////////////////////////////////////////////////////////////
+    // Otto Subscriptions
+    ////////////////////////////////////////////////////////////
 
 	@Subscribe
 	public void musicTimeChanged(MusicTimeChangedEvent event) {
