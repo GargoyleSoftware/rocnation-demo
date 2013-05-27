@@ -84,7 +84,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private DrawerLayout mDrawerLayout;
 	private ListView mNavDrawerList;
 
-  private TabHost mVideoTabHost;
+        private TabHost mVideoTabHost;
 	private ViewGroup mVideoDrawer;
 
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -92,9 +92,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private FrameLayout mContentFrame;
 	private RelativeLayout mVideoFrame;
 	private RelativeLayout mPlayerFrame;
-  private HashMap<String, TabInfo> mVideoTabInfo = new HashMap<String, TabInfo>();
-  private PagerAdapter mVideoPagerAdapter;
-  private ViewPager mVideoViewPager;
+        private HashMap<String, TabInfo> mVideoTabInfo = new HashMap<String, TabInfo>();
+        private PagerAdapter mVideoPagerAdapter;
+        private ViewPager mVideoViewPager;
 
 	private VideoView mVideoView;
 
@@ -111,9 +111,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
 	private boolean mVideoMode = false;
 
-
 	@Inject com.squareup.otto.Bus mBus;
 	@Inject MusicFragment mMusicFragment;
+	@Inject LyricsFragment mLyricsFragment;
 	@Inject MusicTimeUtilities mMusicTimeUtilities;
 
 	@Inject @Named("music")VideoListFragment mVideoFrag1;
@@ -420,7 +420,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			fragment = new MerchandiseFragment();
 			break;
 		case 4:
-			fragment = new LyricsFragment();
+			fragment = mLyricsFragment;
 			break;
 		default:
 			fragment = new PlanetFragment();
