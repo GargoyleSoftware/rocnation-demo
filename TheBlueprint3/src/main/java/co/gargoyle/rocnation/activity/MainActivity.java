@@ -1,5 +1,7 @@
 package co.gargoyle.rocnation.activity;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import android.app.Activity;
@@ -30,6 +32,7 @@ import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
+import co.gargoyle.rocnation.events.MusicTrackChangeEvent;
 import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.fragment.PlanetFragment;
@@ -351,4 +354,14 @@ public class MainActivity extends Activity {
 
     }
 
+	@Subscribe
+    public void onMusicTrackChanged(MusicTrackChangeEvent event) {
+        Log.d("otto", "musicTrackChanged: " + event.song);
+
+		try {
+			mServ.playSong(event.song);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 }

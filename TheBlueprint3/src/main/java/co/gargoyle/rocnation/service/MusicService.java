@@ -14,6 +14,10 @@ import android.widget.Toast;
 import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
+import co.gargoyle.rocnation.events.MusicTrackChangeEvent;
+import co.gargoyle.rocnation.model.Song;
+
+import com.squareup.otto.Subscribe;
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
 
@@ -107,6 +111,18 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         return mMediaPlayer.isPlaying();
     }
 
+	public void playSong(Song song) throws java.io.IOException {
+        Log.d("service", "playSong: " + song);
+
+		mMediaPlayer.stop();
+		mMediaPlayer.reset();
+
+
+		mMediaPlayer.setDataSource(song.audioUrl);
+		mMediaPlayer.prepare();
+		mMediaPlayer.start();
+	}
+
     public void toggleMusic() {
         if (isPlaying()) {
             pauseMusic();
@@ -142,6 +158,15 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
         mMediaPlayer = null;
 
         bus.post(new MusicPausedEvent());
+    }
+
+	////////////////////////////////////////////////////////////
+    // Bus Events
+    ////////////////////////////////////////////////////////////
+
+	@Subscribe
+    public void onMusicTrackChanged(MusicTrackChangeEvent event) {
+        Log.d("otto-service", "musicTrackChanged: " + event.song);
     }
 
     ////////////////////////////////////////////////////////////

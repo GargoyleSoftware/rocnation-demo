@@ -10,13 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import co.gargoyle.rocnation.R;
+import co.gargoyle.rocnation.events.MusicTrackChangeEvent;
 import co.gargoyle.rocnation.model.Song;
 
 import com.activeandroid.widget.ModelAdapter;
 import com.squareup.otto.Bus;
-
-
 
 ////////////////////////////////////////////////////////////
 // MusicFragment
@@ -30,8 +30,6 @@ public class MusicFragment extends ListFragment {
 	@Inject
 	Bus bus;
 
-	// @Inject DatabaseHelper databaseHelper;
-
 	@Inject
     public MusicFragment() {
     }
@@ -44,26 +42,37 @@ public class MusicFragment extends ListFragment {
 
         getActivity().setTitle("Music");
 
-
 		List<Song> songs = Song.getAll();
 		Log.d("songs", songs.toString());
 
-
 		setListAdapter(
-		new ModelAdapter<Song>(
-				getActivity(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-				songs));
+				new ModelAdapter<Song>(
+					getActivity(),
+					android.R.layout.simple_list_item_activated_1,
+					android.R.id.text1,
+					songs));
 
-        // setListAdapter(new ArrayAdapter<DummyContent.DummyItem>(
-        //         getActivity(),
-        //         android.R.layout.simple_list_item_activated_1,
-        //         android.R.id.text1,
-        //         DummyContent.ITEMS));
+		return rootView;
+	}
 
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
 
+		ModelAdapter<Song> songAdapter = getModelAdapter();
+		Song song = songAdapter.getItem(position);
 
-        return rootView;
-    }
+		playSong(song);
+		// play song at index
+	}
+
+	@SuppressWarnings("unchecked")
+	private ModelAdapter<Song> getModelAdapter() {
+		return (ModelAdapter<Song>) getListAdapter();
+	}
+
+	private void playSong(Song song) {
+		bus.post(new MusicTrackChangeEvent(song));
+	}
+
 }
