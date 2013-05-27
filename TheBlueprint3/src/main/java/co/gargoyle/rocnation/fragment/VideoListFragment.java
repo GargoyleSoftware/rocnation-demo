@@ -57,7 +57,7 @@ public class VideoListFragment extends ListFragment {
 		ModelAdapter<Video> videoAdapter = getModelAdapter();
 		Video video = videoAdapter.getItem(position);
 
-		playVideo(video);
+		playVideo(video, position);
 		// play video at index
 	}
 
@@ -67,8 +67,8 @@ public class VideoListFragment extends ListFragment {
 		return (ModelAdapter<Video>) getListAdapter();
 	}
 
-	private void playVideo(Video video) {
-		bus.post(new VideoRequestEvent(video));
+	private void playVideo(Video video, int position) {
+		bus.post(new VideoRequestEvent(video, position));
 	}
 
 	public int getMode() {

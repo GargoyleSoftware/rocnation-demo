@@ -14,9 +14,9 @@ public class RocApplication extends com.activeandroid.app.Application {
 
 	@Override public void onCreate() {
 		super.onCreate();
-		
-//		String customFontPath = "DINOT-Cond.otf";
-//		CustomFont.setFontsToUse(customFontPath, customFontPath, customFontPath, customFontPath);
+
+		//		String customFontPath = "DINOT-Cond.otf";
+		//		CustomFont.setFontsToUse(customFontPath, customFontPath, customFontPath, customFontPath);
 
 		ActiveAndroid.initialize(this);
 		graph = ObjectGraph.create(getModules().toArray());
@@ -28,17 +28,17 @@ public class RocApplication extends com.activeandroid.app.Application {
 		ActiveAndroid.dispose();
 	}
 
-    protected List<Object> getModules() {
-        return Arrays.<Object>asList(
-                new RocModule(this)
-                );
-    }
+	protected List<Object> getModules() {
+		return Arrays.<Object>asList(
+				new RocModule(this)
+				);
+	}
 
 	public void inject(Object object) {
 		graph.inject(object);
 	}
 
-    public ObjectGraph getApplicationGraph() {
-        return graph;
-    }
+	public ObjectGraph getApplicationGraph() {
+		return graph;
+	}
 }

@@ -27,6 +27,7 @@ import dagger.Provides;
         MainActivity.class,
         MusicService.class,
         MusicFragment.class,
+        VideoListFragment.class,
     },
     complete = false,
     library = true
@@ -64,18 +65,21 @@ public class RocModule {
   @Provides @Named("music") VideoListFragment provideMusicVideoListFragment() {
     VideoListFragment fragment = new VideoListFragment();
     fragment.setMode(Video.MUSIC_VIDEO);
+    application.inject(fragment);
     return fragment;
   }
 
   @Provides @Named("interview") VideoListFragment provideInterviewVideoListFragment() {
     VideoListFragment fragment = new VideoListFragment();
     fragment.setMode(Video.INTERVIEW);
+    application.inject(fragment);
     return fragment;
   }
 
   @Provides @Named("making") VideoListFragment provideMakingOfVideoListFragment() {
     VideoListFragment fragment = new VideoListFragment();
     fragment.setMode(Video.BEHIND_THE_SCENES);
+    application.inject(fragment);
     return fragment;
   }
 

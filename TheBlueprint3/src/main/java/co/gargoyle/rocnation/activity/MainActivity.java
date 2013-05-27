@@ -564,6 +564,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     public void onVideoRequest(VideoRequestEvent event) {
       Log.d("otto", "videoRequest: " + event.video);
 
+      updateSelectedVideoAndCloseDrawer(event.index, event.video);
       playVideo(event.video);
     }
 
