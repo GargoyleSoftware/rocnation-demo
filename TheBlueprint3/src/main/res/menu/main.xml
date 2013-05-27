@@ -21,8 +21,8 @@
           <!--android:title="@string/action_websearch"-->
           <!--android:showAsAction="ifRoom|withText" />-->
 
+          <!--android:icon="@drawable/action_search"-->
       <item android:id="@+id/action_video"
-          android:icon="@drawable/action_search"
           android:title="@string/action_video"
           android:showAsAction="ifRoom|withText" />
 

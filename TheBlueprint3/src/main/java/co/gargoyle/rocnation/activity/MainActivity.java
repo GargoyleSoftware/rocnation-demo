@@ -85,6 +85,8 @@ public class MainActivity extends Activity {
 	private boolean mIsBound = false;
 	private MusicService mServ;
 
+	private boolean mVideoMode = false;
+
 	@Inject com.squareup.otto.Bus bus;
 	@Inject MusicFragment musicFragment;
 
@@ -242,9 +244,11 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		// If the nav drawer is open, hide action items related to the content view
-		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mNavDrawerList);
+//		boolean drawerOpen = mDrawerLayout.isDrawerOpen(mNavDrawerList);
 		//menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
-		menu.findItem(R.id.action_video).setVisible(!drawerOpen);
+
+		menu.findItem(R.id.action_video).setVisible(mVideoMode);
+
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -432,6 +436,8 @@ public class MainActivity extends Activity {
         mContentFrame.setVisibility(View.GONE);
 
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
+
+		mVideoMode = true;
     }
 
     private void exitVideoMode() {
@@ -443,6 +449,8 @@ public class MainActivity extends Activity {
         mContentFrame.setVisibility(View.VISIBLE);
 
         mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.RIGHT);
+
+		mVideoMode = false;
     }
 
     private void pauseVideo() {
