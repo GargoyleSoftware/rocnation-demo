@@ -47,6 +47,7 @@ import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
+import co.gargoyle.rocnation.events.MusicTimeRequestEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.events.VideoRequestEvent;
@@ -462,13 +463,14 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
   private OnSeekBarChangeListener mSongSeekBarListener = new OnSeekBarChangeListener() {
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-      if (fromUser) {
-        int newTime = progress;
-        //mServ.seek(newTime);
-        //mBus.post(new MusicTimeRequestEvent(newTime));
-      } else {
-
-      }
+    	if (fromUser) {
+    		Log.v("seek", "user");
+    		int newTime = progress;
+    		mServ.seek(newTime);
+    		//mBus.post(new MusicTimeRequestEvent(newTime));
+    	} else {
+    		Log.v("seek", "not user");
+    	}
     }
 
     @Override

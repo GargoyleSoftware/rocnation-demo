@@ -12,14 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import co.gargoyle.rocnation.R;
-import co.gargoyle.rocnation.activity.MainActivity;
 import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.model.Song;
 import co.gargoyle.rocnation.service.MusicService;
 
 import com.activeandroid.widget.ModelAdapter;
-import com.google.common.base.Optional;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 

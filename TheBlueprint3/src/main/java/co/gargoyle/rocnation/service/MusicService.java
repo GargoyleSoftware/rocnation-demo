@@ -19,8 +19,11 @@ import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicStoppedEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
+import co.gargoyle.rocnation.events.MusicTimeRequestEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.model.Song;
+
+import com.squareup.otto.Subscribe;
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
 
@@ -278,6 +281,12 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	// 		e.printStackTrace();
 	// 	}
 	// }
+
+	@Subscribe
+	public void onMusicTimeRequest(MusicTimeRequestEvent event) {
+		Log.d("otto-service", "musicTimeChanged: " + event.requestedTime);
+
+	}
 
 	////////////////////////////////////////////////////////////
 	// Callbacks
