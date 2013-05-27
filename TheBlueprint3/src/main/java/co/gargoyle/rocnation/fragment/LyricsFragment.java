@@ -3,18 +3,14 @@ package co.gargoyle.rocnation.fragment;
 import java.io.IOException;
 import java.util.List;
 
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 import co.gargoyle.rocnation.R;
-import co.gargoyle.rocnation.dummy.DummyContent;
 import co.gargoyle.rocnation.list.LyricAdapter;
 import co.gargoyle.rocnation.model.Song;
 import co.gargoyle.rocnation.model.json.Lyric;

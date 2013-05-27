@@ -45,8 +45,8 @@ import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.constants.PlaybackMode;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
+import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
-import co.gargoyle.rocnation.events.MusicTimeRequestEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.events.VideoRequestEvent;
@@ -65,6 +65,7 @@ import co.gargoyle.rocnation.tabs.TabFactory;
 import co.gargoyle.rocnation.tabs.TabInfo;
 
 import com.androidhive.musicplayer.MusicTimeUtilities;
+import com.google.common.base.Optional;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -136,6 +137,8 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 				binder) {
 			MusicService.ServiceBinder musicBinder = (MusicService.ServiceBinder)binder;
 			mServ = musicBinder.getService();
+
+			mBus.post(new MusicServiceConnectedEvent(mServ));
 		}
 
 		public void onServiceDisconnected(ComponentName name) {
@@ -405,7 +408,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
 		switch (position) {
 		case 0:
-			//fragment = new MusicFragment();
 			fragment = mMusicFragment;
 			break;
 		case 1:
@@ -653,23 +655,33 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         int pos = this.mVideoTabHost.getCurrentTab();
 
         this.mVideoViewPager.setCurrentItem(pos);
-
     }
 
     @Override
     public void onPageScrollStateChanged(int arg0) {
-      // TODO Auto-generated method stub
 
     }
 
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2) {
-      // TODO Auto-generated method stub
+
 
     }
 
     @Override
     public void onPageSelected(int position) {
       mVideoTabHost.setCurrentTab(position);
+    }
+
+    ////////////////////////////////////////////////////////////
+    // Misc
+    ////////////////////////////////////////////////////////////
+
+    public Optional<MusicService> getMusicService() {
+    	if (mServ == null) {
+    		return Optional.absent();
+    	} else {
+    		return Optional.of(mServ);
+    	}
     }
 }
