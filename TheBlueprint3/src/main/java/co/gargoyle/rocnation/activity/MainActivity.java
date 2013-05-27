@@ -485,7 +485,7 @@ public class MainActivity extends Activity {
 
 		try {
 			mServ.playSong(event.song);
-			updateMusicButton(PlaybackMode.PLAYING);
+			// updateMusicButton(PlaybackMode.PLAYING);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

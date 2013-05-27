@@ -8,6 +8,7 @@ import android.content.Context;
 import android.location.LocationManager;
 import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.activity.MainActivity;
+import co.gargoyle.rocnation.events.bus.AndroidBus;
 import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.service.MusicService;
 
@@ -30,7 +31,7 @@ import dagger.Provides;
 public class RocModule {
   private final RocApplication application;
   private final DatabaseHelper databaseHelper;
-  private final Bus bus = new Bus();
+  private final Bus bus = new AndroidBus();
 
   public RocModule(RocApplication application) {
 	  this.application = application;

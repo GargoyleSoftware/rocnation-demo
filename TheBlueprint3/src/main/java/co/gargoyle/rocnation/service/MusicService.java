@@ -121,6 +121,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		mMediaPlayer.setDataSource(song.audioUrl);
 		mMediaPlayer.prepare();
 		mMediaPlayer.start();
+
+		bus.post(new MusicPlayingEvent());
 	}
 
     public void toggleMusic() {
