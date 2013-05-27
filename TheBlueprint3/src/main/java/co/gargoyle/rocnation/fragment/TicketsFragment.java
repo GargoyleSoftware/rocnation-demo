@@ -18,7 +18,7 @@ import android.widget.ImageView;
  * Fragment that appears in the "content_frame", shows a planet
  */
 public class TicketsFragment extends Fragment {
-	public static final int img = R.drawable.ticketsview;
+	public static final int img = R.drawable.tickets_view;
 
 	public TicketsFragment() {
 		// Empty constructor required for fragment subclasses

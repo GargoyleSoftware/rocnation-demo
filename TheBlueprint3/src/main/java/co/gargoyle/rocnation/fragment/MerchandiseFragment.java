@@ -17,6 +17,7 @@ import co.gargoyle.rocnation.R;
  * Fragment that appears in the "content_frame", shows a planet
  */
 public class MerchandiseFragment extends Fragment {
+	public static final int img = R.drawable.merch_view;
 
 	public MerchandiseFragment() {
 		// Empty constructor required for fragment subclasses
