@@ -20,53 +20,63 @@ import com.squareup.otto.Bus;
 
 public class VideoListFragment extends ListFragment {
 
-  @Inject
-  Bus bus;
+	private int mMode;
 
-  @Inject
-  public VideoListFragment() {
-  }
+	@Inject
+	Bus bus;
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
+	@Inject
+	public VideoListFragment() {
+	}
 
-    View rootView = inflater.inflate(R.layout.fragment_music, container, false);
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 
-    getActivity().setTitle("Video");
+		View rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
-    List<Video> videos = Video.getAll();
-    Log.d("videos", videos.toString());
+		getActivity().setTitle("Video");
 
-    setListAdapter(
-        new ModelAdapter<Video>(
-          getActivity(),
-          android.R.layout.simple_list_item_activated_1,
-          android.R.id.text1,
-          videos));
+		List<Video> videos = Video.getAllWithType(mMode);
+		Log.d("videos", videos.toString());
 
-    return rootView;
-  }
+		setListAdapter(
+				new ModelAdapter<Video>(
+						getActivity(),
+						android.R.layout.simple_list_item_activated_1,
+						android.R.id.text1,
+						videos));
 
-  @Override
-  public void onListItemClick(ListView l, View v, int position, long id) {
-    super.onListItemClick(l, v, position, id);
+		return rootView;
+	}
 
-    ModelAdapter<Video> videoAdapter = getModelAdapter();
-    Video video = videoAdapter.getItem(position);
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
 
-    playVideo(video);
-    // play video at index
-  }
+		ModelAdapter<Video> videoAdapter = getModelAdapter();
+		Video video = videoAdapter.getItem(position);
+
+		playVideo(video);
+		// play video at index
+	}
 
 
-  @SuppressWarnings("unchecked")
-  private ModelAdapter<Video> getModelAdapter() {
-    return (ModelAdapter<Video>) getListAdapter();
-  }
+	@SuppressWarnings("unchecked")
+	private ModelAdapter<Video> getModelAdapter() {
+		return (ModelAdapter<Video>) getListAdapter();
+	}
 
-  private void playVideo(Video video) {
-    bus.post(new VideoRequestEvent(video));
-  }
+	private void playVideo(Video video) {
+		bus.post(new VideoRequestEvent(video));
+	}
+
+	public int getMode() {
+		return mMode;
+	}
+
+	public void setMode(int mMode) {
+		this.mMode = mMode;
+	}
 
 }

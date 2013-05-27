@@ -2,6 +2,7 @@ package co.gargoyle.rocnation.inject;
 
 import static android.content.Context.LOCATION_SERVICE;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import android.content.Context;
@@ -10,6 +11,8 @@ import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.activity.MainActivity;
 import co.gargoyle.rocnation.events.bus.AndroidBus;
 import co.gargoyle.rocnation.fragment.MusicFragment;
+import co.gargoyle.rocnation.fragment.VideoListFragment;
+import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
 
 import com.activeandroid.DatabaseHelper;
@@ -39,9 +42,9 @@ public class RocModule {
   }
 
   /**
-* Allow the application context to be injected but require that it be annotated with
-* {@link ForApplication @Annotation} to explicitly differentiate it from an activity context.
-*/
+   * Allow the application context to be injected but require that it be annotated with
+   * {@link ForApplication @Annotation} to explicitly differentiate it from an activity context.
+   */
   @Provides @Singleton @ForApplication Context provideApplicationContext() {
     return application;
   }
@@ -55,6 +58,25 @@ public class RocModule {
   }
 
   @Provides @Singleton DatabaseHelper provideDatabaseHelper() {
-	  return databaseHelper;
+    return databaseHelper;
   }
+
+  @Provides @Named("music") VideoListFragment provideMusicVideoListFragment() {
+    VideoListFragment fragment = new VideoListFragment();
+    fragment.setMode(Video.MUSIC_VIDEO);
+    return fragment;
+  }
+
+  @Provides @Named("interview") VideoListFragment provideInterviewVideoListFragment() {
+    VideoListFragment fragment = new VideoListFragment();
+    fragment.setMode(Video.INTERVIEW);
+    return fragment;
+  }
+
+  @Provides @Named("making") VideoListFragment provideMakingOfVideoListFragment() {
+    VideoListFragment fragment = new VideoListFragment();
+    fragment.setMode(Video.BEHIND_THE_SCENES);
+    return fragment;
+  }
+
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -111,9 +112,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	@Inject MusicFragment mMusicFragment;
 	@Inject MusicTimeUtilities mMusicTimeUtilities;
 
-	@Inject VideoListFragment mVideoFrag1;
-	@Inject VideoListFragment mVideoFrag2;
-	@Inject VideoListFragment mVideoFrag3;
+	@Inject @Named("music")VideoListFragment mVideoFrag1;
+	@Inject @Named("interview")VideoListFragment mVideoFrag2;
+	@Inject @Named("making")VideoListFragment mVideoFrag3;
 
 	////////////////////////////////////////////////////////////
 	// Constructor
