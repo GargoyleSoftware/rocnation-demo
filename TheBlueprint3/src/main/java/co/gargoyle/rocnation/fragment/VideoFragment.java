@@ -4,14 +4,12 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.MediaController;
 import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 
@@ -25,7 +23,7 @@ import co.gargoyle.rocnation.R;
  * Fragment that appears in the "content_frame", shows a planet
  */
 public class VideoFragment extends Fragment implements SurfaceHolder.Callback {
-  private static final String VIDEO_URL = "http://www.androidbegin.com/tutorial/AndroidCommercial.3gp";
+  // private static final String VIDEO_URL = "http://www.androidbegin.com/tutorial/AndroidCommercial.3gp";
 
   private VideoView mVideoView;
   // Put in your Video URL here

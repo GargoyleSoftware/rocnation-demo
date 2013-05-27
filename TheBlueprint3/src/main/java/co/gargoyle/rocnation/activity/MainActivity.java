@@ -26,8 +26,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.MediaController;
 import android.widget.RelativeLayout;
@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 
 	private VideoView mVideoView;
 
-	private Button mPlayButton;
+	private ImageButton mPlayButton;
 	// private MusicService.ServiceBinder mPlaybackBinder;
 
 	private CharSequence mDrawerTitle;
@@ -157,7 +157,7 @@ public class MainActivity extends Activity {
 		// Set video link (mp4 format )
 		mVideoView.setMediaController(mediaController);
 
-		mPlayButton = (Button) findViewById(R.id.play_button);
+		mPlayButton = (ImageButton) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
 
 		// set a custom shadow that overlays the main content when the drawer opens
@@ -314,7 +314,8 @@ public class MainActivity extends Activity {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position,
                 long id) {
-            ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
+            @SuppressWarnings("unchecked")
+			ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
 
             Video video = videoAdapter.getItem(position);
 
