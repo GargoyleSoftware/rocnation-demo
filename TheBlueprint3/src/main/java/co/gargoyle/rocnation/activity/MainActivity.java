@@ -34,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.VideoView;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.RocApplication;
+import co.gargoyle.rocnation.constants.PlaybackMode;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
@@ -399,11 +400,20 @@ public class MainActivity extends Activity {
 			Log.d("activity", "onPlayPressed");
 
 			mServ.toggleMusic();
+
 			//mServ.resumeMusic();
 			// mServ.pauseMusic();
 			// mServ.stopMusic();
 		}
 	};
+
+    private void updateMusicButton(PlaybackMode mode) {
+        if (mode == PlaybackMode.PAUSED) {
+            mPlayButton.setImageResource(R.drawable.player_play_button);
+        } else if (mode == PlaybackMode.PLAYING) {
+            mPlayButton.setImageResource(R.drawable.player_pause_button);
+        }
+    }
 
 	////////////////////////////////////////////////////////////
 	// Video Player
@@ -458,12 +468,15 @@ public class MainActivity extends Activity {
 	@Subscribe
 	public void onMusicPlaying(MusicPlayingEvent event) {
 		Log.d("otto", "onMusicPlaying");
+
+        updateMusicButton(PlaybackMode.PLAYING);
 	}
 
 	@Subscribe
 	public void onMusicPaused(MusicPausedEvent event) {
 		Log.d("otto", "onMusicPaused");
 
+        updateMusicButton(PlaybackMode.PAUSED);
 	}
 
 	@Subscribe
