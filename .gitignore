@@ -37,3 +37,4 @@ bin/
 .idea
 *.sublime-*
 node_modules/
+lint.xml
