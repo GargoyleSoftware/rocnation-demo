@@ -46,12 +46,14 @@ import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
+import co.gargoyle.rocnation.events.VideoRequestEvent;
 import co.gargoyle.rocnation.fragment.LyricsFragment;
 import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
 import co.gargoyle.rocnation.fragment.VideoFragment;
+import co.gargoyle.rocnation.fragment.VideoListFragment;
 import co.gargoyle.rocnation.list.NavAdapter;
 import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
@@ -108,6 +110,10 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	@Inject com.squareup.otto.Bus mBus;
 	@Inject MusicFragment mMusicFragment;
 	@Inject MusicTimeUtilities mMusicTimeUtilities;
+
+	@Inject VideoListFragment mVideoFrag1;
+	@Inject VideoListFragment mVideoFrag2;
+	@Inject VideoListFragment mVideoFrag3;
 
 	////////////////////////////////////////////////////////////
 	// Constructor
@@ -435,24 +441,20 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			Log.d("activity", "onPlayPressed");
 
 			mServ.toggleMusic();
-
-			//mServ.resumeMusic();
-			// mServ.pauseMusic();
-			// mServ.stopMusic();
 		}
 	};
 
-    private void updateMusicButton(PlaybackMode mode) {
-        if (mode == PlaybackMode.PAUSED) {
-            mPlayButton.setImageResource(R.drawable.player_play_button);
-        } else if (mode == PlaybackMode.PLAYING) {
-            mPlayButton.setImageResource(R.drawable.player_pause_button);
-        }
+  private void updateMusicButton(PlaybackMode mode) {
+    if (mode == PlaybackMode.PAUSED) {
+      mPlayButton.setImageResource(R.drawable.player_play_button);
+    } else if (mode == PlaybackMode.PLAYING) {
+      mPlayButton.setImageResource(R.drawable.player_pause_button);
     }
+  }
 
-	////////////////////////////////////////////////////////////
-	// Video Player
-    ////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////
+  // Video Player
+  ////////////////////////////////////////////////////////////
 
     private void updateSelectedVideoAndCloseDrawer(int position, Video video) {
 //        mVideoDrawerList.setItemChecked(position, true);
@@ -557,6 +559,13 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
       mSongProgressBar.setMax(castedMax);
     }
 
+    @Subscribe
+    public void onVideoRequest(VideoRequestEvent event) {
+      Log.d("otto", "videoRequest: " + event.video);
+
+      playVideo(event.video);
+    }
+
     ////////////////////////////////////////////////////////////
     // TabHost
     ////////////////////////////////////////////////////////////
@@ -567,9 +576,14 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     private void initViewPager() {
 
         List<Fragment> fragments = new Vector<Fragment>();
-        fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
-        fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
+        // fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
+        // fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
+        // fragments.add(Fragment.instantiate(this, PlanetFragment.class.getName()));
+
+        fragments.add(mVideoFrag1);
+        fragments.add(mVideoFrag2);
+        fragments.add(mVideoFrag3);
+
         this.mVideoPagerAdapter  = new PagerAdapter(super.getSupportFragmentManager(), fragments);
 
         this.mVideoViewPager = (ViewPager)super.findViewById(R.id.video_section_pager);
@@ -605,23 +619,25 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     public void onTabChanged(String tag) {
         //TabInfo newTab = this.mVideoTabInfo.get(tag);
         int pos = this.mVideoTabHost.getCurrentTab();
+
         this.mVideoViewPager.setCurrentItem(pos);
+
     }
 
-	@Override
-	public void onPageScrollStateChanged(int arg0) {
-		// TODO Auto-generated method stub
+    @Override
+    public void onPageScrollStateChanged(int arg0) {
+      // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
-		// TODO Auto-generated method stub
+    @Override
+    public void onPageScrolled(int arg0, float arg1, int arg2) {
+      // TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void onPageSelected(int position) {
-    mVideoTabHost.setCurrentTab(position);
-	}
+    @Override
+    public void onPageSelected(int position) {
+      mVideoTabHost.setCurrentTab(position);
+    }
 }

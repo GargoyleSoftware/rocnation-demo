@@ -30,30 +30,30 @@ public class MusicFragment extends ListFragment {
 	@Inject
 	Bus bus;
 
-	@Inject
-    public MusicFragment() {
-    }
+  @Inject
+  public MusicFragment() {
+  }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_music, container, false);
+    View rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
-        getActivity().setTitle("Music");
+    getActivity().setTitle("Music");
 
-		List<Song> songs = Song.getAll();
-		Log.d("songs", songs.toString());
+    List<Song> songs = Song.getAll();
+    Log.d("songs", songs.toString());
 
-		setListAdapter(
-				new ModelAdapter<Song>(
-					getActivity(),
-					android.R.layout.simple_list_item_activated_1,
-					android.R.id.text1,
-					songs));
+    setListAdapter(
+        new ModelAdapter<Song>(
+          getActivity(),
+          android.R.layout.simple_list_item_activated_1,
+          android.R.id.text1,
+          songs));
 
-		return rootView;
-	}
+    return rootView;
+  }
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
