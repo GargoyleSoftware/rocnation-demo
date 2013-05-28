@@ -42,9 +42,16 @@ public class LyricAdapter extends BaseAdapter {
 		TextView textView = (TextView) vi.findViewById(R.id.lyric_text);
 		ImageView imageView = (ImageView) vi.findViewById(R.id.indicator);
 
-		imageView.setVisibility(View.VISIBLE);
+
 
 		Lyric lyric = lyrics.get(position);
+
+		if (lyric.hasAnnotation()) {
+			imageView.setVisibility(View.VISIBLE);
+		} else {
+			imageView.setVisibility(View.GONE);
+		}
+
 
 		textView.setText(lyric.text);
 
