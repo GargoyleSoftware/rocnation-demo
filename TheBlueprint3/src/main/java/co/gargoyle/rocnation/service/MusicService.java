@@ -30,7 +30,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	@Inject com.squareup.otto.Bus bus;
 
 	private final IBinder mBinder = new ServiceBinder();
-	private Handler mHandler = new Handler();;
+	private Handler mHandler = new Handler();
 	MediaPlayer mMediaPlayer;
 	private int length = 0;
 	private Song mCurrentSong;
