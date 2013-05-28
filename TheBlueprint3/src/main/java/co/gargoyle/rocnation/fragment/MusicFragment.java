@@ -60,6 +60,10 @@ public class MusicFragment extends Fragment {
 	public MusicFragment() {
 	}
 
+	////////////////////////////////////////////////////////////
+	// Fragment Lifecycle
+	////////////////////////////////////////////////////////////
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -89,6 +93,16 @@ public class MusicFragment extends Fragment {
 
 		return rootView;
 	}
+
+	public void onDestroyView () {
+		super.onDestroyView();
+
+		mHandler.removeCallbacks(mUpdateTimeTask);
+	}
+
+	////////////////////////////////////////////////////////////
+	// Fragment Lifecycle
+	////////////////////////////////////////////////////////////
 
 	/**
 	 * Background Runnable thread
