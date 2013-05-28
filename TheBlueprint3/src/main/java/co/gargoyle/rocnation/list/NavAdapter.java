@@ -16,8 +16,7 @@ public class NavAdapter extends BaseAdapter {
 			R.drawable.videos, 
 			R.drawable.concerts, 
 			R.drawable.merchandise,
-			R.drawable.lyrics,
-			R.drawable.art};
+			R.drawable.lyrics};
 
 	public NavAdapter(Context context) { 
         inflater = LayoutInflater.from(context);

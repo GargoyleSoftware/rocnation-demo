@@ -50,7 +50,6 @@ import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.events.VideoRequestEvent;
-import co.gargoyle.rocnation.fragment.ArtFragment;
 import co.gargoyle.rocnation.fragment.LyricsFragment;
 import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
@@ -428,9 +427,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			break;
 		case 4:
 			fragment = mLyricsFragment;
-			break;
-		case 5:
-			fragment = new ArtFragment();
 			break;
 		default:
 			fragment = new PlanetFragment();
