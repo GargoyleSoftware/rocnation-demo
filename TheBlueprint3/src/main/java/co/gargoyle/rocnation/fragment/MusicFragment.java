@@ -5,21 +5,32 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.inject.Inject;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 import co.gargoyle.rocnation.R;
+import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
+import co.gargoyle.rocnation.model.Song;
+import co.gargoyle.rocnation.service.MusicService;
+
+import com.activeandroid.widget.ModelAdapter;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 ////////////////////////////////////////////////////////////
 // MusicFragment
@@ -32,11 +43,13 @@ public class MusicFragment extends Fragment {
 
 	@Inject
 	Bus bus;
-	
+
 	private Handler mHandler = new Handler();
 	private ArrayList<String> images;
 	private Iterator<String> iterator;
 	private View rootView;
+
+	private MusicService mMusicService;
 
 	@Inject
 	public MusicFragment() {
@@ -52,13 +65,14 @@ public class MusicFragment extends Fragment {
 
 		Button button = (Button) rootView.findViewById(R.id.title);
 		button.setOnClickListener(new View.OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Herro", Toast.LENGTH_LONG).show();
+				showAlert();
 			}
 		});
-		
+
 		getActivity().setTitle("Music");
 		try {
 			images = new ArrayList<String>(Arrays.asList(getActivity().getAssets().list("art")));
@@ -71,7 +85,7 @@ public class MusicFragment extends Fragment {
 
 		return rootView;
 	}
-	
+
 	/**
 	 * Background Runnable thread
 	 * */
@@ -82,7 +96,7 @@ public class MusicFragment extends Fragment {
 			mHandler.postDelayed(this, 5000);
 		}
 	};
-	
+
 	private void setArtImage() {
 		ImageView imageView = (ImageView) rootView.findViewById(R.id.art);
 		InputStream imageStream;
@@ -98,6 +112,40 @@ public class MusicFragment extends Fragment {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	private void showAlert() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle("Select Track");
+
+		ListView modeList = new ListView(getActivity());
+
+		List<Song> songs = Song.getAll();
+		modeList.setAdapter(
+				new ModelAdapter<Song>(
+					getActivity(),
+					android.R.layout.simple_list_item_activated_1,
+					android.R.id.text1,
+					songs));
+
+		modeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+		int pos = mMusicService.getCurrentSongIndex();
+
+		//modeList.setItemChecked(5, true);
+		modeList.setItemChecked(pos, true);
+
+		builder.setView(modeList);
+		final Dialog dialog = builder.create();
+		dialog.show();
+	}
+
+	@Subscribe
+	public void onMusicServiceConnected(MusicServiceConnectedEvent event) {
+		Log.d("otto", "musicService connected");
+
+		MusicService musicService = event.service;
+
+		mMusicService = musicService;
+	}
+
 }

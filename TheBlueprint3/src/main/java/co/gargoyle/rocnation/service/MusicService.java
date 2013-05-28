@@ -228,7 +228,7 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		return mCurrentSong;
 	}
 
-	private int getCurrentSongIndex() {
+	public int getCurrentSongIndex() {
 		return mSongs.indexOf(mCurrentSong);
 	}
 
