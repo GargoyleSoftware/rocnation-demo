@@ -1,8 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/lyric_text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:adjustViewBounds="true"
-    android:textSize="25sp"
-    />
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	>
+
+	<TextView
+		android:id="@+id/lyric_text"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:layout_alignParentLeft="true"
+		android:layout_toLeftOf="@+id/indicator"
+		android:textSize="25sp"
+		/>
+	<!--android:gravity="left"-->
+
+	<ImageView
+		android:id="@+id/indicator"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerVertical="true"
+		android:layout_alignParentRight="true"
+		android:src="@drawable/bubble"
+		android:visibility="gone"
+		/>
+
+</RelativeLayout>
