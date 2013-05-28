@@ -9,9 +9,9 @@
         <item>Games</item>
     </string-array>
 
-		<string name="what_we_talkin_about">What We Talkin\' About</string>
+		<string name="what_we_talkin_about">What We Talkin\' About - Ft. Luke Steele</string>
 
-    <string name="action_video">Videos</string>
+    <string name="action_video">Pick Video</string>
 
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>

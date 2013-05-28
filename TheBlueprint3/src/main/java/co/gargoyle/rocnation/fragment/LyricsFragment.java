@@ -41,7 +41,6 @@ import com.squareup.otto.Subscribe;
  * Fragment that appears in the "content_frame", shows a planet
  */
 public class LyricsFragment extends ListFragment {
-	public static final int img = R.drawable.lyrics_view;
 
 	@Inject Bus mBus;
 

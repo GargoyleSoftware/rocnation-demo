@@ -524,6 +524,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
       mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, Gravity.RIGHT);
 
+			// pause music
+			mServ.pauseMusic();
+
       mVideoMode = true;
     }
 
