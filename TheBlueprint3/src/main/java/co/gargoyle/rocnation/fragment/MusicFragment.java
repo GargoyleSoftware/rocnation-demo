@@ -62,7 +62,7 @@ public class MusicFragment extends Fragment {
 	private ImageView mImageViewA;
 	//private ImageView mImageViewB;
 	private Animation myFadeInAnimation;
-	private Animation myFadeOutAnimation;
+//	private Animation myFadeOutAnimation;
 
 	@Inject
 	public MusicFragment() {
@@ -84,7 +84,7 @@ public class MusicFragment extends Fragment {
 //		mImageViewB = (ImageView) rootView.findViewById(R.id.image_b);
 
 		myFadeInAnimation  = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
-		myFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
+//		myFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
 
 		mTitleButton = (Button) rootView.findViewById(R.id.title);
 		mTitleButton.setOnClickListener(new View.OnClickListener() {

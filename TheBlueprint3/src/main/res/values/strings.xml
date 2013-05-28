@@ -17,7 +17,7 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="app_name" >The Blueprint 3
     </string>
-    <string name="title_song_detail" >Song Detail
-    </string>
+    <string name="title_song_detail" >Song Detail</string>
+    <string name="no_data_lyrics" >No lyrics available! Please play a song or move to another track.</string>
 
 </resources>
