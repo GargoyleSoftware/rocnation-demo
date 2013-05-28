@@ -1,18 +1,13 @@
 package co.gargoyle.rocnation.fragment;
 
-import java.util.Locale;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.support.v4.view.ViewPager;
-import android.support.v4.app.FragmentPagerAdapter;
 import co.gargoyle.rocnation.R;
 
 

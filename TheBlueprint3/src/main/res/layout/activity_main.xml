@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/player_frame"
+				android:background="@color/black"
         >
       </FrameLayout>
 
@@ -83,31 +84,13 @@
             android:layout_weight="0"
             />
 
-          <!--<TextView-->
-            <!--android:id="@+id/test_text"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="0dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="Herro worrd"-->
-            <!--android:background="@color/maroon"-->
-            <!--/>-->
-
           <android.support.v4.view.ViewPager
             android:id="@+id/video_section_pager"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/navy"
-            />
-
-          <!--<ListView-->
-            <!--android:id="@+id/video_list"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:choiceMode="singleChoice"-->
-            <!--android:divider="@android:color/transparent"-->
-            <!--android:dividerHeight="0dp"-->
-            <!--android:background="#111"/>-->
+            android:background="@color/gray"
+						/>
 
         </LinearLayout>
       </FrameLayout>
