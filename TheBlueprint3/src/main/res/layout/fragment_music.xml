@@ -21,7 +21,6 @@
         android:layout_alignParentTop="true"
         android:background="#FF0000"
         android:gravity="center"
-				android:text="Run this Town Ft. Rihanna"
 				/>
 
     <ImageView

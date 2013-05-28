@@ -21,13 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
+import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.model.Song;
 import co.gargoyle.rocnation.service.MusicService;
@@ -45,8 +45,7 @@ import com.squareup.otto.Subscribe;
  */
 public class MusicFragment extends Fragment {
 
-	@Inject
-	Bus bus;
+	@Inject Bus bus;
 
 	private Handler mHandler = new Handler();
 	private ArrayList<String> images;
@@ -54,6 +53,8 @@ public class MusicFragment extends Fragment {
 	private View rootView;
 
 	private MusicService mMusicService;
+
+	private Button mTitleButton;
 
 	@Inject
 	public MusicFragment() {
@@ -67,9 +68,8 @@ public class MusicFragment extends Fragment {
 
 		rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
-		Button button = (Button) rootView.findViewById(R.id.title);
-		button.setOnClickListener(new View.OnClickListener() {
-
+		mTitleButton = (Button) rootView.findViewById(R.id.title);
+		mTitleButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(getActivity(), "Herro", Toast.LENGTH_LONG).show();
@@ -133,10 +133,8 @@ public class MusicFragment extends Fragment {
 
 		modeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
-
 		int pos = mMusicService.getCurrentSongIndex();
 
-		//modeList.setItemChecked(5, true);
 		modeList.setItemChecked(pos, true);
 
 		builder.setView(modeList);
@@ -147,13 +145,18 @@ public class MusicFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> adapterView, View view, int pos,
 					long id) {
+				dialog.dismiss();
+
 				Song song = songs.get(pos);
 				Log.d("modeList", "item selected: " + song);
 				bus.post(new MusicTrackRequestEvent(song));
-				dialog.dismiss();
 			}
 		});
 	}
+
+	////////////////////////////////////////////////////////////
+	// Otto Events
+	////////////////////////////////////////////////////////////
 
 	@Subscribe
 	public void onMusicServiceConnected(MusicServiceConnectedEvent event) {
@@ -162,6 +165,21 @@ public class MusicFragment extends Fragment {
 		MusicService musicService = event.service;
 
 		mMusicService = musicService;
+	}
+
+	@Subscribe
+	public void onMusicTrackChanged(MusicTrackChangedEvent event) {
+		Log.d("otto-music", "musicTrackChanged: " + event.song);
+
+		updateSongTitleIndicator(event.song);
+	}
+
+	////////////////////////////////////////////////////////////
+	// Misc
+	////////////////////////////////////////////////////////////
+
+	private void updateSongTitleIndicator(Song song) {
+		mTitleButton.setText(song.fullName());
 	}
 
 }
