@@ -45,11 +45,12 @@ import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.constants.PlaybackMode;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
+import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
-import co.gargoyle.rocnation.events.MusicTimeRequestEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.events.VideoRequestEvent;
+import co.gargoyle.rocnation.fragment.ArtFragment;
 import co.gargoyle.rocnation.fragment.LyricsFragment;
 import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
@@ -65,6 +66,7 @@ import co.gargoyle.rocnation.tabs.TabFactory;
 import co.gargoyle.rocnation.tabs.TabInfo;
 
 import com.androidhive.musicplayer.MusicTimeUtilities;
+import com.google.common.base.Optional;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -83,7 +85,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private DrawerLayout mDrawerLayout;
 	private ListView mNavDrawerList;
 
-        private TabHost mVideoTabHost;
+	private TabHost mVideoTabHost;
 	private ViewGroup mVideoDrawer;
 
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -91,13 +93,15 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private FrameLayout mContentFrame;
 	private RelativeLayout mVideoFrame;
 	private RelativeLayout mPlayerFrame;
-        private HashMap<String, TabInfo> mVideoTabInfo = new HashMap<String, TabInfo>();
-        private PagerAdapter mVideoPagerAdapter;
-        private ViewPager mVideoViewPager;
+	private HashMap<String, TabInfo> mVideoTabInfo = new HashMap<String, TabInfo>();
+	private PagerAdapter mVideoPagerAdapter;
+	private ViewPager mVideoViewPager;
 
 	private VideoView mVideoView;
 
 	private ImageButton mPlayButton;
+	private ImageButton mRewindButton;
+	private ImageButton mFfwdButton;
 	private SeekBar mSongProgressBar;
 	// private MusicService.ServiceBinder mPlaybackBinder;
 
@@ -136,6 +140,8 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 				binder) {
 			MusicService.ServiceBinder musicBinder = (MusicService.ServiceBinder)binder;
 			mServ = musicBinder.getService();
+
+			mBus.post(new MusicServiceConnectedEvent(mServ));
 		}
 
 		public void onServiceDisconnected(ComponentName name) {
@@ -200,6 +206,10 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
 		mPlayButton = (ImageButton) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
+		mRewindButton = (ImageButton) findViewById(R.id.play_button);
+//		mRewindButton.setOnClickListener(mOnRewindPressedListener);
+		mFfwdButton = (ImageButton) findViewById(R.id.play_button);
+//		mFfwdButton.setOnClickListener(mOnFfwdPressedListener);
 
 		mSongProgressBar = (SeekBar) findViewById(R.id.song_progress_bar);
 		mSongProgressBar.setOnSeekBarChangeListener(mSongSeekBarListener);
@@ -405,7 +415,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
 		switch (position) {
 		case 0:
-			//fragment = new MusicFragment();
 			fragment = mMusicFragment;
 			break;
 		case 1:
@@ -419,6 +428,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			break;
 		case 4:
 			fragment = mLyricsFragment;
+			break;
+		case 5:
+			fragment = new ArtFragment();
 			break;
 		default:
 			fragment = new PlanetFragment();
@@ -460,13 +472,14 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
   private OnSeekBarChangeListener mSongSeekBarListener = new OnSeekBarChangeListener() {
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-      if (fromUser) {
-        int newTime = progress;
-        //mServ.seek(newTime);
-        //mBus.post(new MusicTimeRequestEvent(newTime));
-      } else {
-
-      }
+    	if (fromUser) {
+    		Log.v("seek", "user");
+    		int newTime = progress;
+    		mServ.seek(newTime);
+    		//mBus.post(new MusicTimeRequestEvent(newTime));
+    	} else {
+    		Log.v("seek", "not user");
+    	}
     }
 
     @Override
@@ -653,23 +666,33 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         int pos = this.mVideoTabHost.getCurrentTab();
 
         this.mVideoViewPager.setCurrentItem(pos);
-
     }
 
     @Override
     public void onPageScrollStateChanged(int arg0) {
-      // TODO Auto-generated method stub
 
     }
 
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2) {
-      // TODO Auto-generated method stub
+
 
     }
 
     @Override
     public void onPageSelected(int position) {
       mVideoTabHost.setCurrentTab(position);
+    }
+
+    ////////////////////////////////////////////////////////////
+    // Misc
+    ////////////////////////////////////////////////////////////
+
+    public Optional<MusicService> getMusicService() {
+    	if (mServ == null) {
+    		return Optional.absent();
+    	} else {
+    		return Optional.of(mServ);
+    	}
     }
 }

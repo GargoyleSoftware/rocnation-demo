@@ -12,11 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import co.gargoyle.rocnation.R;
+import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.model.Song;
+import co.gargoyle.rocnation.service.MusicService;
 
 import com.activeandroid.widget.ModelAdapter;
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 ////////////////////////////////////////////////////////////
 // MusicFragment
@@ -38,19 +41,11 @@ public class MusicFragment extends ListFragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
 
+		bus.register(this);
+
     View rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
     getActivity().setTitle("Music");
-
-    List<Song> songs = Song.getAll();
-    Log.d("songs", songs.toString());
-
-    setListAdapter(
-        new ModelAdapter<Song>(
-          getActivity(),
-          android.R.layout.simple_list_item_activated_1,
-          android.R.id.text1,
-          songs));
 
     return rootView;
   }
@@ -63,7 +58,6 @@ public class MusicFragment extends ListFragment {
 		Song song = songAdapter.getItem(position);
 
 		playSong(song);
-		// play song at index
 	}
 
 	@SuppressWarnings("unchecked")
@@ -73,6 +67,22 @@ public class MusicFragment extends ListFragment {
 
 	private void playSong(Song song) {
 		bus.post(new MusicTrackRequestEvent(song));
+	}
+
+	@Subscribe
+	public void onMusicServiceConnected(MusicServiceConnectedEvent event) {
+		Log.d("otto", "musicService connected");
+
+		MusicService musicService = event.service;
+
+		List<Song> songs = musicService.getSongs();
+		Log.d("songs", songs.toString());
+		setListAdapter(
+				new ModelAdapter<Song>(
+					getActivity(),
+					android.R.layout.simple_list_item_activated_1,
+					android.R.id.text1,
+					songs));
 	}
 
 }

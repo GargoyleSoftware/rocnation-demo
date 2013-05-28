@@ -1,10 +1,5 @@
 package co.gargoyle.rocnation.fragment;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -18,7 +13,6 @@ import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
 import co.gargoyle.rocnation.list.LyricAdapter;
 import co.gargoyle.rocnation.model.Song;
 import co.gargoyle.rocnation.model.json.Lyric;
-
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -26,6 +20,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import java.io.IOException;
+import java.util.List;
+import javax.inject.Inject;
 
 
 

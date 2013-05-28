@@ -1,5 +1,8 @@
 package co.gargoyle.rocnation.service;
 
+import java.io.IOException;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import android.app.Service;
@@ -14,9 +17,13 @@ import android.widget.Toast;
 import co.gargoyle.rocnation.RocApplication;
 import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
+import co.gargoyle.rocnation.events.MusicStoppedEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
+import co.gargoyle.rocnation.events.MusicTimeRequestEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.model.Song;
+
+import com.squareup.otto.Subscribe;
 
 public class MusicService extends Service implements MediaPlayer.OnErrorListener {
 
@@ -26,6 +33,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	private Handler mHandler = new Handler();;
 	MediaPlayer mMediaPlayer;
 	private int length = 0;
+	private Song mCurrentSong;
+	private List<Song> mSongs;
 
 	////////////////////////////////////////////////////////////
 	// ServiceBinder
@@ -61,6 +70,10 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		RocApplication app = (RocApplication) getApplication();
 		app.getApplicationGraph().inject(this);
 
+		bus.register(this);
+
+		mSongs = Song.getAll();
+
 		Log.d("service", "onCreate");
 
 		//Uri uri = Uri.parse("https://gargoyle.s3.amazonaws.com/rocnation/audio/01-What%20We%20Talkin%20About.mp3");
@@ -69,15 +82,16 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		mMediaPlayer = new MediaPlayer();
 
 		mMediaPlayer.setOnErrorListener(this);
+		mMediaPlayer.setOnCompletionListener(mOnCompletionListener);
 
 		if(mMediaPlayer!= null) {
 			mMediaPlayer.setLooping(true);
-			mMediaPlayer.setVolume(100,100);
+			mMediaPlayer.setVolume(100, 100);
 		}
 
 		mMediaPlayer.setOnErrorListener(new OnErrorListener() {
 			public boolean onError(MediaPlayer mp, int what, int extra) {
-				onError(mMediaPlayer, what, extra);
+				MusicService.this.onError(mMediaPlayer, what, extra);
 				return true;
 			}
 		});
@@ -115,6 +129,8 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	}
 
 	public void loadSong(Song song) throws java.io.IOException {
+		mCurrentSong = song;
+
 		mMediaPlayer.stop();
 		mMediaPlayer.reset();
 
@@ -155,21 +171,34 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 
 	public void resumeMusic() {
 		Log.d("service", "resumeMusic");
-		if(isPlaying() == false) {
-			mMediaPlayer.seekTo(length);
-			mMediaPlayer.start();
+		if(mCurrentSong == null) {
+			// this must be first load. let's grab the first track and rock it
+			try {
+				playSong(getFirstSong());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-			bus.post(new MusicPlayingEvent());
+		} else {
+			if(isPlaying() == false) {
+				mMediaPlayer.seekTo(length);
+				mMediaPlayer.start();
+
+				bus.post(new MusicPlayingEvent());
+			}
 		}
 	}
 
 	public void stopMusic() {
 		Log.d("service", "stopMusic");
+
+		mCurrentSong = null;
+
 		mMediaPlayer.stop();
 		mMediaPlayer.release();
 		mMediaPlayer = null;
 
-		bus.post(new MusicPausedEvent());
+		bus.post(new MusicStoppedEvent());
 	}
 
 	public void updateProgressBar() {
@@ -183,6 +212,60 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 		// }
 	}
 
+	////////////////////////////////////////////////////////////
+	// Track List
+	////////////////////////////////////////////////////////////
+
+	public List<Song> getSongs() {
+		return mSongs;
+	}
+
+	public Song getFirstSong() {
+		return mSongs.get(0);
+	}
+
+	public Song getCurrentSong() {
+		return mCurrentSong;
+	}
+
+	private int getCurrentSongIndex() {
+		return mSongs.indexOf(mCurrentSong);
+	}
+
+	private Song nextTrack() {
+		int currentIndex = getCurrentSongIndex();
+		int nextIndex;
+		if (currentIndex < lastIndexOf(mSongs)) {
+			nextIndex = currentIndex + 1;
+		} else {
+			nextIndex = 0;
+		}
+		return mSongs.get(nextIndex);
+	}
+
+	private Song previousTrack() {
+		int currentIndex = getCurrentSongIndex();
+		int nextIndex;
+		if (currentIndex >= 1) {
+			nextIndex = currentIndex - 1;
+		} else {
+			nextIndex = lastIndexOf(mSongs);
+		}
+		return mSongs.get(nextIndex);
+	}
+
+	public void toNextTrack() throws IOException {
+		playSong(nextTrack());
+	}
+
+	public void toPreviousTrack() throws IOException {
+		playSong(previousTrack());
+	}
+
+	@SuppressWarnings("rawtypes")
+	private int lastIndexOf(List list) {
+		return list.size() - 1;
+	}
 
 	////////////////////////////////////////////////////////////
 	// Bus Events
@@ -200,9 +283,26 @@ public class MusicService extends Service implements MediaPlayer.OnErrorListener
 	// 	}
 	// }
 
+	@Subscribe
+	public void onMusicTimeRequest(MusicTimeRequestEvent event) {
+		Log.d("otto-service", "musicTimeChanged: " + event.requestedTime);
+
+	}
+
 	////////////////////////////////////////////////////////////
 	// Callbacks
 	////////////////////////////////////////////////////////////
+
+	private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
+		@Override
+		public void onCompletion(MediaPlayer mediaPlayer) {
+			try {
+				toNextTrack();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	};
 
 	public boolean onError(MediaPlayer mp, int what, int extra) {
 		Log.d("service", "onError");
