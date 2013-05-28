@@ -41,24 +41,20 @@
 			/>
 	</LinearLayout>
 
-
 	<SeekBar
-		android:id="@+id/song_progress_bar"
-		android:background="@color/red"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_centerVertical="true"
-		android:layout_centerHorizontal="true"
-		android:layout_toRightOf="@+id/button_wrapper"
-
-		android:paddingRight="20dp"
-		android:paddingLeft="20dp"
-
-		android:layout_marginBottom="20dp"
-		android:thumb="@drawable/player_slider_handle"
-		android:progressDrawable="@drawable/player_slider_bar"
-		android:layout_marginLeft="6dp"
-		android:layout_marginRight="6dp"
-		/>
+	    android:id="@+id/song_progress_bar"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_centerHorizontal="true"
+	    android:layout_centerVertical="true"
+	    android:layout_marginBottom="20dp"
+	    android:layout_marginLeft="6dp"
+	    android:layout_marginRight="6dp"
+	    android:layout_toRightOf="@+id/button_wrapper"
+	    android:background="@color/gray"
+	    android:paddingLeft="20dp"
+	    android:paddingRight="20dp"
+	    android:progressDrawable="@drawable/player_slider_bar"
+	    android:thumb="@drawable/player_slider_handle" />
 
 </RelativeLayout>
