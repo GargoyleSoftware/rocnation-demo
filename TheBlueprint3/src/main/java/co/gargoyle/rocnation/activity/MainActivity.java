@@ -47,10 +47,10 @@ import co.gargoyle.rocnation.events.MusicPausedEvent;
 import co.gargoyle.rocnation.events.MusicPlayingEvent;
 import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
 import co.gargoyle.rocnation.events.MusicTimeChangedEvent;
-import co.gargoyle.rocnation.events.MusicTimeRequestEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
 import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.events.VideoRequestEvent;
+import co.gargoyle.rocnation.fragment.ArtFragment;
 import co.gargoyle.rocnation.fragment.LyricsFragment;
 import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
@@ -85,7 +85,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private DrawerLayout mDrawerLayout;
 	private ListView mNavDrawerList;
 
-        private TabHost mVideoTabHost;
+	private TabHost mVideoTabHost;
 	private ViewGroup mVideoDrawer;
 
 	private ActionBarDrawerToggle mDrawerToggle;
@@ -93,13 +93,15 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	private FrameLayout mContentFrame;
 	private RelativeLayout mVideoFrame;
 	private RelativeLayout mPlayerFrame;
-        private HashMap<String, TabInfo> mVideoTabInfo = new HashMap<String, TabInfo>();
-        private PagerAdapter mVideoPagerAdapter;
-        private ViewPager mVideoViewPager;
+	private HashMap<String, TabInfo> mVideoTabInfo = new HashMap<String, TabInfo>();
+	private PagerAdapter mVideoPagerAdapter;
+	private ViewPager mVideoViewPager;
 
 	private VideoView mVideoView;
 
 	private ImageButton mPlayButton;
+	private ImageButton mRewindButton;
+	private ImageButton mFfwdButton;
 	private SeekBar mSongProgressBar;
 	// private MusicService.ServiceBinder mPlaybackBinder;
 
@@ -204,6 +206,10 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
 		mPlayButton = (ImageButton) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
+		mRewindButton = (ImageButton) findViewById(R.id.play_button);
+//		mRewindButton.setOnClickListener(mOnRewindPressedListener);
+		mFfwdButton = (ImageButton) findViewById(R.id.play_button);
+//		mFfwdButton.setOnClickListener(mOnFfwdPressedListener);
 
 		mSongProgressBar = (SeekBar) findViewById(R.id.song_progress_bar);
 		mSongProgressBar.setOnSeekBarChangeListener(mSongSeekBarListener);
@@ -422,6 +428,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			break;
 		case 4:
 			fragment = mLyricsFragment;
+			break;
+		case 5:
+			fragment = new ArtFragment();
 			break;
 		default:
 			fragment = new PlanetFragment();
