@@ -148,27 +148,29 @@ public class LyricsFragment extends ListFragment {
 	}
 
 	private void loadLyricsForSong(Song song) {
-		ObjectMapper mapper = new ObjectMapper();
+		if (song != null) {
+			ObjectMapper mapper = new ObjectMapper();
 
-		TypeFactory typeFactory = mapper.getTypeFactory();
-		String lyricJsonString = song.lyricJson;
-		JavaType lyricsType = typeFactory.constructCollectionType(List.class, Lyric.class);
+			TypeFactory typeFactory = mapper.getTypeFactory();
+			String lyricJsonString = song.lyricJson;
+			JavaType lyricsType = typeFactory.constructCollectionType(List.class, Lyric.class);
 
-		List<Lyric> lyrics = null;
-		try {
-			lyrics = mapper.readValue(lyricJsonString, lyricsType);
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+			List<Lyric> lyrics = null;
+			try {
+				lyrics = mapper.readValue(lyricJsonString, lyricsType);
+			} catch (JsonParseException e) {
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-		if (lyrics == null) {
-			// don't make a list adapter
-		} else {
-			setListAdapter(new LyricAdapter(getActivity(), lyrics));
+			if (lyrics == null) {
+				// don't make a list adapter
+			} else {
+				setListAdapter(new LyricAdapter(getActivity(), lyrics));
+			}
 		}
 	}
 

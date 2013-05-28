@@ -365,21 +365,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         }
     }
 
-//    private AdapterView.OnItemClickListener mVideoDrawerListener = new AdapterView.OnItemClickListener() {
-//        @Override
-//        public void onItemClick(AdapterView<?> adapterView, View view, int position,
-//                long id) {
-////            @SuppressWarnings("unchecked")
-////			ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
-////
-////            Video video = videoAdapter.getItem(position);
-////
-////            updateSelectedVideoAndCloseDrawer(position, video);
-////
-////            playVideo(video);
-//        }
-//    };
-
 	////////////////////////////////////////////////////////////
 	// Nav
 	////////////////////////////////////////////////////////////
@@ -440,6 +425,8 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	}
 
 	private void swapFragment(Fragment fragment) {
+//		FragmentManager.popBackStack(String name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 	}
@@ -456,7 +443,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			mServ.toggleMusic();
 		}
 	};
-	
+
 	View.OnClickListener mOnRewindPressedListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -470,7 +457,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			}
 		}
 	};
-	
+
 	View.OnClickListener mOnFfwdPressedListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -699,7 +686,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
     @Override
     public void onPageScrolled(int arg0, float arg1, int arg2) {
-
 
     }
 
