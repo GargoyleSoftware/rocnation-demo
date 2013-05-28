@@ -170,6 +170,7 @@ public class LyricsFragment extends ListFragment {
 			if (lyrics == null) {
 				// don't make a list adapter
 			} else {
+        mCurrentIndex = 0;
 				setListAdapter(new LyricAdapter(getActivity(), lyrics));
 			}
 		}
