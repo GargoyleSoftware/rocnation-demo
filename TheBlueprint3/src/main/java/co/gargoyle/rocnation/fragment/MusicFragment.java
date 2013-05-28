@@ -23,10 +23,10 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
 import co.gargoyle.rocnation.events.MusicTrackChangedEvent;
@@ -57,7 +57,8 @@ public class MusicFragment extends Fragment {
 
 	private MusicService mMusicService;
 
-	private Button mTitleButton;
+	private ImageButton mPickerButton;
+	private TextView mTitleLabel;
 
 	private ImageView mImageViewA;
 	//private ImageView mImageViewB;
@@ -80,17 +81,17 @@ public class MusicFragment extends Fragment {
 
 		rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
+		mTitleLabel = (TextView) rootView.findViewById(R.id.title);
 		mImageViewA = (ImageView) rootView.findViewById(R.id.image_a);
 //		mImageViewB = (ImageView) rootView.findViewById(R.id.image_b);
 
 		myFadeInAnimation  = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
 //		myFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
 
-		mTitleButton = (Button) rootView.findViewById(R.id.title);
-		mTitleButton.setOnClickListener(new View.OnClickListener() {
+		mPickerButton = (ImageButton) rootView.findViewById(R.id.picker);
+		mPickerButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Herro", Toast.LENGTH_LONG).show();
 				showAlert();
 			}
 		});
@@ -244,7 +245,7 @@ public class MusicFragment extends Fragment {
 	////////////////////////////////////////////////////////////
 
 	private void updateSongTitleIndicator(Song song) {
-		mTitleButton.setText(song.fullName());
+		mTitleLabel.setText(song.fullName());
 	}
 
 }

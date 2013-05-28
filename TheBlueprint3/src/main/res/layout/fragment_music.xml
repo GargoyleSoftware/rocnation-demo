@@ -1,31 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	>
 
-		<Button
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="64dp"
+		android:layout_weight="0"
+		android:layout_alignParentTop="true"
+		>
+		<ImageButton
+			android:id="@+id/picker"
+			android:layout_width="match_parent"
+			android:layout_height="64dp"
+			android:src="@drawable/picker_drop_down"
+			android:background="@color/yellow"
+			android:scaleType="fitXY"
+			/>
+
+		<TextView
 		    android:id="@+id/title"
-		    android:layout_width="match_parent"
-		    android:layout_height="64dp"
-		    android:layout_alignParentTop="true"
-		    android:background="@color/red"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
 		    android:gravity="center"
-		    android:text="What We Talkin&apos; About" />
+				android:text="@string/what_we_talkin_about"
+				android:layout_centerHorizontal="true"
+				android:layout_centerVertical="true"
+				android:textSize="14sp"
+				android:textColor="@color/white"
+				android:textStyle="bold"
+				/>
 
 		<ImageView
-			android:id="@+id/image_a"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:layout_centerInParent="true"
-			android:layout_below="@+id/title"
+			android:id="@+id/arrow"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
 			android:gravity="center"
+			android:src="@drawable/picker_drop_down_arrow"
+			android:layout_marginRight="10dp"
+			android:layout_alignParentRight="true"
+			android:layout_centerVertical="true"
 			/>
-		<!--android:layout_alignParentLeft="true"-->
-		<!--android:layout_alignParentTop="true"-->
-		<!--android:layout_centerInParent="true"-->
-		<!--android:alpha="0.0"-->
 
-</RelativeLayout>
+	</RelativeLayout>
+
+	<ImageView
+		android:layout_weight="1"
+		android:id="@+id/image_a"
+		android:layout_width="match_parent"
+		android:layout_height="0px"
+		android:layout_centerInParent="true"
+		android:layout_below="@+id/title"
+		android:gravity="center"
+		/>
+	<!--android:layout_alignParentLeft="true"-->
+	<!--android:layout_alignParentTop="true"-->
+	<!--android:layout_centerInParent="true"-->
+	<!--android:alpha="0.0"-->
+
+</LinearLayout>

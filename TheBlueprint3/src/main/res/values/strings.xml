@@ -9,6 +9,8 @@
         <item>Games</item>
     </string-array>
 
+		<string name="what_we_talkin_about">What We Talkin\' About</string>
+
     <string name="action_video">Videos</string>
 
     <string name="drawer_open">Open navigation drawer</string>
