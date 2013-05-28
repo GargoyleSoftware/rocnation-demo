@@ -31,17 +31,17 @@ public class MerchandiseFragment extends Fragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_merchandise, container, false);
 		Button buyMerch = (Button) rootView.findViewById(R.id.buyMerchButton);
-        buyMerch.setOnClickListener(new View.OnClickListener() {
+		buyMerch.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                // go to next fragment
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.hide(MerchandiseFragment.this);
-                transaction.addToBackStack("add");
-                transaction.add(R.id.content_frame, new BuyMerchFragment(), "Buy Merch").commit();
-            }
-        });
+			@Override
+			public void onClick(View v) {
+				// go to next fragment
+				FragmentTransaction transaction = getFragmentManager().beginTransaction();
+				transaction.hide(MerchandiseFragment.this);
+				transaction.addToBackStack("add");
+				transaction.add(R.id.content_frame, new BuyMerchFragment(), "Buy Merch").commit();
+			}
+		});
 
 		// int i = getArguments().getInt(ARG_PLANET_NUMBER);
 		// String planet = getResources().getStringArray(R.array.nav_array)[i];

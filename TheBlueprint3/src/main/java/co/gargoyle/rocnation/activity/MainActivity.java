@@ -425,7 +425,10 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 	}
 
 	private void swapFragment(Fragment fragment) {
-//		FragmentManager.popBackStack(String name, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+		FragmentManager fm = getSupportFragmentManager();
+		for(int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+			fm.popBackStack();
+		}
 
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
