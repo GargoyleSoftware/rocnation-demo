@@ -365,20 +365,20 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
         }
     }
 
-    private AdapterView.OnItemClickListener mVideoDrawerListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> adapterView, View view, int position,
-                long id) {
-//            @SuppressWarnings("unchecked")
-//			ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
-//
-//            Video video = videoAdapter.getItem(position);
-//
-//            updateSelectedVideoAndCloseDrawer(position, video);
-//
-//            playVideo(video);
-        }
-    };
+//    private AdapterView.OnItemClickListener mVideoDrawerListener = new AdapterView.OnItemClickListener() {
+//        @Override
+//        public void onItemClick(AdapterView<?> adapterView, View view, int position,
+//                long id) {
+////            @SuppressWarnings("unchecked")
+////			ModelAdapter<Video> videoAdapter = (ModelAdapter<Video>) mVideoDrawerList.getAdapter();
+////
+////            Video video = videoAdapter.getItem(position);
+////
+////            updateSelectedVideoAndCloseDrawer(position, video);
+////
+////            playVideo(video);
+//        }
+//    };
 
 	////////////////////////////////////////////////////////////
 	// Nav

@@ -19,12 +19,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 import co.gargoyle.rocnation.R;
 import co.gargoyle.rocnation.events.MusicServiceConnectedEvent;
+import co.gargoyle.rocnation.events.MusicTrackRequestEvent;
 import co.gargoyle.rocnation.model.Song;
 import co.gargoyle.rocnation.service.MusicService;
 
@@ -119,7 +123,7 @@ public class MusicFragment extends Fragment {
 
 		ListView modeList = new ListView(getActivity());
 
-		List<Song> songs = Song.getAll();
+		final List<Song> songs = Song.getAll();
 		modeList.setAdapter(
 				new ModelAdapter<Song>(
 					getActivity(),
@@ -129,6 +133,7 @@ public class MusicFragment extends Fragment {
 
 		modeList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
+
 		int pos = mMusicService.getCurrentSongIndex();
 
 		//modeList.setItemChecked(5, true);
@@ -137,6 +142,17 @@ public class MusicFragment extends Fragment {
 		builder.setView(modeList);
 		final Dialog dialog = builder.create();
 		dialog.show();
+
+		modeList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int pos,
+					long id) {
+				Song song = songs.get(pos);
+				Log.d("modeList", "item selected: " + song);
+				bus.post(new MusicTrackRequestEvent(song));
+				dialog.dismiss();
+			}
+		});
 	}
 
 	@Subscribe
