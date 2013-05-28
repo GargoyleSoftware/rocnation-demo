@@ -18,19 +18,19 @@ import co.gargoyle.rocnation.R;
 /**
  * Fragment that appears in the "content_frame", shows a planet
  */
-public class CheckoutFragment extends Fragment {
+public class CheckoutMerchFragment extends Fragment {
 
-    public CheckoutFragment() {
+    public CheckoutMerchFragment() {
         // Empty constructor required for fragment subclasses
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_tickets_checkout, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_merchandise_checkout, container, false);
  
 
-        getActivity().setTitle("Checkout Page");
+        getActivity().setTitle("Checkout Merchandise Page");
 
         return rootView;
     }

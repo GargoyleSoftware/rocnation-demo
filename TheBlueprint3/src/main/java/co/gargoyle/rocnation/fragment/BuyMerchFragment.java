@@ -15,38 +15,38 @@ import co.gargoyle.rocnation.R;
 
 
 ////////////////////////////////////////////////////////////
-//BuyTicketFragment
+//BuyMerchFragment
 ////////////////////////////////////////////////////////////
 
 /**
  * Fragment that appears in the "content_frame", shows a planet
  */
-public class BuyTicketFragment extends Fragment {
+public class BuyMerchFragment extends Fragment {
 
-    public BuyTicketFragment() {
+    public BuyMerchFragment() {
         // Empty constructor required for fragment subclasses
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_tickets_buy, container, false);
-        Button checkout = (Button) rootView.findViewById(R.id.checkoutButton);
-        checkout.setOnClickListener(new View.OnClickListener() {
+        View rootView = inflater.inflate(R.layout.fragment_merchandise_buy, container, false);
+        Button checkoutMerch = (Button) rootView.findViewById(R.id.checkoutMerchButton);
+        checkoutMerch.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Your ticket has been purchased", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Your item has been purchased", Toast.LENGTH_LONG).show();
 
                 // go to next fragment
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.hide(BuyTicketFragment.this);
+                transaction.hide(BuyMerchFragment.this);
                 transaction.addToBackStack("add");
-                transaction.add(R.id.content_frame, new CheckoutFragment(), "Checkout").commit();
+                transaction.add(R.id.content_frame, new CheckoutMerchFragment(), "Checkout Merch").commit();
             }
         });
 
-        getActivity().setTitle("Buy Tickets");
+        getActivity().setTitle("Buy Merchandise");
 
         return rootView;
     }
