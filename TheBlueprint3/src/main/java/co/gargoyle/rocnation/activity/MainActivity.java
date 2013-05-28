@@ -206,10 +206,10 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
 		mPlayButton = (ImageButton) findViewById(R.id.play_button);
 		mPlayButton.setOnClickListener(mOnPlayPressedListener);
-		mRewindButton = (ImageButton) findViewById(R.id.play_button);
-//		mRewindButton.setOnClickListener(mOnRewindPressedListener);
-		mFfwdButton = (ImageButton) findViewById(R.id.play_button);
-//		mFfwdButton.setOnClickListener(mOnFfwdPressedListener);
+		mRewindButton = (ImageButton) findViewById(R.id.rewind_button);
+		mRewindButton.setOnClickListener(mOnRewindPressedListener);
+		mFfwdButton = (ImageButton) findViewById(R.id.ffwd_button);
+		mFfwdButton.setOnClickListener(mOnFfwdPressedListener);
 
 		mSongProgressBar = (SeekBar) findViewById(R.id.song_progress_bar);
 		mSongProgressBar.setOnSeekBarChangeListener(mSongSeekBarListener);
@@ -458,6 +458,34 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			Log.d("activity", "onPlayPressed");
 
 			mServ.toggleMusic();
+		}
+	};
+	
+	View.OnClickListener mOnRewindPressedListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Log.d("activity", "onRewindPressed");
+
+			try {
+				mServ.toPreviousTrack();
+			} catch (IOException e) {
+				mServ.toggleMusic();
+				e.printStackTrace();
+			}
+		}
+	};
+	
+	View.OnClickListener mOnFfwdPressedListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			Log.d("activity", "onFforwardPressed");
+
+			try {
+				mServ.toNextTrack();
+			} catch (IOException e) {
+				mServ.toggleMusic();
+				e.printStackTrace();
+			}
 		}
 	};
 
