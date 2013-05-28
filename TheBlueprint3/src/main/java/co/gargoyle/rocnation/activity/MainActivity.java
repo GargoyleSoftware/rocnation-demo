@@ -55,7 +55,6 @@ import co.gargoyle.rocnation.fragment.MerchandiseFragment;
 import co.gargoyle.rocnation.fragment.MusicFragment;
 import co.gargoyle.rocnation.fragment.PlanetFragment;
 import co.gargoyle.rocnation.fragment.TicketsFragment;
-import co.gargoyle.rocnation.fragment.VideoFragment;
 import co.gargoyle.rocnation.fragment.VideoListFragment;
 import co.gargoyle.rocnation.list.NavAdapter;
 import co.gargoyle.rocnation.model.Video;
@@ -190,7 +189,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 		//mVideoTabHost.setup();
 
 		//mVideoDrawer = (ViewGroup) findViewById(R.id.video_wrapper);
-//		mVideoList = (ListView) findViewById(R.id.video_list);
+		//		mVideoList = (ListView) findViewById(R.id.video_list);
 
 		mContentFrame = (FrameLayout) findViewById(R.id.content_frame);
 		mVideoFrame   = (RelativeLayout) findViewById(R.id.video_frame);
@@ -228,8 +227,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 //						videos));
 //		mVideoDrawerList.setOnItemClickListener(mVideoDrawerListener);
 
-
-
 		// enable ActionBar app icon to behave as action to toggle nav drawer
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
@@ -260,7 +257,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 		}
 
 		doBindService();
-
 
 		//ViewServer.get(this).addWindow(this);
 	}
@@ -402,7 +398,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			fragment = mMusicFragment;
 			break;
 		case 1:
-			fragment = new VideoFragment();
+			fragment = new PlanetFragment();
 			break;
 		case 2:
 			fragment = new TicketsFragment();
@@ -510,9 +506,9 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
   };
 
-  ////////////////////////////////////////////////////////////
-  // Video Player
-  ////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////
+	// Video Player
+	////////////////////////////////////////////////////////////
 
     private void updateSelectedVideoAndCloseDrawer(int position, Video video) {
 //        mVideoDrawerList.setItemChecked(position, true);
@@ -549,7 +545,6 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
     }
 
     private void playVideo(Video video) {
-        // mVideoView.setVideoURI(Uri.parse("http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"));
         mVideoView.stopPlayback();
         mVideoView.setVideoURI(Uri.parse(video.videoUrl));
         mVideoView.start();
