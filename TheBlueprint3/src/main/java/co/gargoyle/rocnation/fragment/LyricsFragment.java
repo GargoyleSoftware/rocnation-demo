@@ -131,15 +131,19 @@ public class LyricsFragment extends ListFragment {
 
     private void advanceLyricIfNecessary(long millis) {
         // TODO: test this
-        Lyric nextLyric = getLyricAtIndex(mCurrentIndex + 1);
-        long nextTime = nextLyric.timestamp;
-
-        if (millis >= nextTime) {
-            // advance to next lyric
-            setCurrentIndex(mCurrentIndex + 1);
-        } else {
-            // chill on our current lyric
-        }
+    	try {
+    		Lyric nextLyric = getLyricAtIndex(mCurrentIndex + 2);
+            long nextTime = nextLyric.timestamp;
+            if (millis >= nextTime) {
+                // advance to next lyric
+                setCurrentIndex(mCurrentIndex + 1);
+            } else {
+                // chill on our current lyric
+            }
+    	}
+    	catch (IndexOutOfBoundsException e) {
+            e.printStackTrace();	
+    	}
     }
 
     private void setCurrentIndex(int position) {
