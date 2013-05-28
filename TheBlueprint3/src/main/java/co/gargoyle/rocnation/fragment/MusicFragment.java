@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -33,6 +35,7 @@ import co.gargoyle.rocnation.model.Song;
 import co.gargoyle.rocnation.service.MusicService;
 
 import com.activeandroid.widget.ModelAdapter;
+import com.google.common.base.Optional;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -56,6 +59,11 @@ public class MusicFragment extends Fragment {
 
 	private Button mTitleButton;
 
+	private ImageView mImageViewA;
+	private ImageView mImageViewB;
+	private Animation myFadeInAnimation;
+	private Animation myFadeOutAnimation;
+
 	@Inject
 	public MusicFragment() {
 	}
@@ -72,6 +80,12 @@ public class MusicFragment extends Fragment {
 
 		rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
+		mImageViewA = (ImageView) rootView.findViewById(R.id.image_a);
+		mImageViewB = (ImageView) rootView.findViewById(R.id.image_b);
+
+		myFadeInAnimation  = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
+		myFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
+
 		mTitleButton = (Button) rootView.findViewById(R.id.title);
 		mTitleButton.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -86,7 +100,8 @@ public class MusicFragment extends Fragment {
 			images = new ArrayList<String>(Arrays.asList(getActivity().getAssets().list("art")));
 			iterator = images.iterator();
 			setArtImage();
-			mHandler.postDelayed(mUpdateTimeTask, 10000);
+			//mHandler.postDelayed(mUpdateTimeTask, 10000);
+			mHandler.postDelayed(mUpdateTimeTask, 2000);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -117,18 +132,10 @@ public class MusicFragment extends Fragment {
 	};
 
 	private void setArtImage() {
-		ImageView imageView = (ImageView) rootView.findViewById(R.id.art);
-		InputStream imageStream;
-		try {
-			if(!iterator.hasNext()) {
-				iterator = images.iterator();
-			}
-			String filePath = "art/" + iterator.next();
-			System.out.println("Setting Image to file: " + filePath);
-			imageStream = getActivity().getAssets().open(filePath);
-			imageView.setImageDrawable(Drawable.createFromStream(imageStream, null));
-		} catch (IOException e) {
-			e.printStackTrace();
+		Optional<Drawable> drawable = getNextDrawable();
+
+		if (drawable.isPresent()) {
+			animateImageViews(drawable.get());
 		}
 	}
 
@@ -187,6 +194,44 @@ public class MusicFragment extends Fragment {
 		Log.d("otto-music", "musicTrackChanged: " + event.song);
 
 		updateSongTitleIndicator(event.song);
+	}
+
+	////////////////////////////////////////////////////////////
+	// Image loading
+	////////////////////////////////////////////////////////////
+
+	private Optional<Drawable> getNextDrawable() {
+		try {
+			if(!iterator.hasNext()) {
+				iterator = images.iterator();
+			}
+			String filePath = "art/" + iterator.next();
+			System.out.println("Setting Image to file: " + filePath);
+			InputStream imageStream;
+			imageStream = getActivity().getAssets().open(filePath);
+			Drawable drawable = Drawable.createFromStream(imageStream, null);
+			return Optional.of(drawable);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return Optional.absent();
+	}
+
+	private void animateImageViews(Drawable drawable) {
+		if (mImageViewA.getAlpha() == 1.0) {
+			swapImageViews(mImageViewA, mImageViewB, drawable);
+		} else {
+			swapImageViews(mImageViewB, mImageViewA, drawable);
+		}
+	}
+
+	private void swapImageViews(ImageView oldie, ImageView newbie, Drawable drawable) {
+		newbie.setImageDrawable(drawable);
+
+		oldie.setImageDrawable(drawable);
+
+		oldie.startAnimation(myFadeOutAnimation);
+		newbie.startAnimation(myFadeInAnimation);
 	}
 
 	////////////////////////////////////////////////////////////
