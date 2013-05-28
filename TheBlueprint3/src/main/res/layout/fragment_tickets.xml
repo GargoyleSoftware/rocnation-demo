@@ -20,7 +20,7 @@
 		android:layout_alignParentRight="true"
 		android:layout_alignParentTop="true"
 		android:layout_marginRight="32dp"
-		android:layout_marginTop="98dp"
+		android:layout_marginTop="82dp"
 		android:text="Purchase \nTickets"
 		android:textSize="12sp"
 		android:alpha="1.0"
