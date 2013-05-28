@@ -98,6 +98,7 @@ public class MusicFragment extends Fragment {
 		super.onDestroyView();
 
 		mHandler.removeCallbacks(mUpdateTimeTask);
+		bus.unregister(this);
 	}
 
 	////////////////////////////////////////////////////////////
