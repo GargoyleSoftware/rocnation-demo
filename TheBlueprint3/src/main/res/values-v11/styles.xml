@@ -1,11 +1,20 @@
 <resources>
 
-    <!--
+  <!--
         Base application theme for API 11+. This theme completely replaces
         AppBaseTheme from res/values/styles.xml on API 11+ devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Holo">
-        <!-- API 11 theme customizations can go here. -->
+      <!-- API 11 theme customizations can go here. -->
+      <!--<item name="android:colorPressedHighlight">@color/red</item>-->
+      <!--<item name="android:colorLongPressedHighlight">@color/red</item>-->
+      <!--<item name="android:colorFocusedHighlight">@color/yellow</item>-->
+      <!--<item name="android:colorMultiSelectHighlight">@color/yellow</item>-->
+      <!--<item name="android:colorActivatedHighlight">@color/green</item>-->
+
+      <!--<item name="android:listChoiceBackgroundIndicator">@color/green</item>-->
+      <!--<item name="android:activatedBackgroundIndicator">@color/red</item>-->
+
     </style>
 
 </resources>

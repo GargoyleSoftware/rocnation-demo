@@ -79,6 +79,7 @@ public class LyricsFragment extends ListFragment {
 
 		View rootView = inflater.inflate(R.layout.fragment_lyrics, container, false);
 
+
 		// empire state
 
 		return rootView;
@@ -142,8 +143,18 @@ public class LyricsFragment extends ListFragment {
 	}
 
 	private void setCurrentIndex(int position) {
-		mCurrentIndex = position;
-		getListView().setSelection(mCurrentIndex);
+    mCurrentIndex = position;
+    ListView listView = getListView();
+
+
+    listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+
+    listView.setSelection(mCurrentIndex);
+    listView.setItemChecked(mCurrentIndex, true);
+
+    int middleIndex = mCurrentIndex + 3;
+    getListView().smoothScrollToPosition(middleIndex, mCurrentIndex);
 
 		// TODO: Move listview to this index
 	}
