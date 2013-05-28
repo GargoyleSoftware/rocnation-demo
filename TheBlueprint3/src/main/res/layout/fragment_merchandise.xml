@@ -9,30 +9,39 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:adjustViewBounds="true"
-		android:src="@drawable/merch1"
-		android:contentDescription="sexy images"
+		android:src="@drawable/dummy_merchandise_list"
 		/>
 
-	<ImageView
-		android:id="@+id/image_view2"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentLeft="true"
-		android:layout_centerVertical="true"
-		android:adjustViewBounds="true"
-		android:contentDescription="sexy images"
-		android:gravity="top"
-		android:src="@drawable/merch2" />
 
-	<ImageView
-		android:id="@+id/image_view3"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentLeft="true"
-		android:adjustViewBounds="true"
-		android:contentDescription="sexy images"
-		android:src="@drawable/merch3" />
+	<!--<ImageView-->
+		<!--android:id="@+id/image_view1"-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:adjustViewBounds="true"-->
+		<!--android:src="@drawable/merch1"-->
+		<!--android:contentDescription="sexy images"-->
+		<!--/>-->
+
+	<!--<ImageView-->
+		<!--android:id="@+id/image_view2"-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_alignParentLeft="true"-->
+		<!--android:layout_centerVertical="true"-->
+		<!--android:adjustViewBounds="true"-->
+		<!--android:contentDescription="sexy images"-->
+		<!--android:gravity="top"-->
+		<!--android:src="@drawable/merch2" />-->
+
+	<!--<ImageView-->
+		<!--android:id="@+id/image_view3"-->
+		<!--android:layout_width="match_parent"-->
+		<!--android:layout_height="wrap_content"-->
+		<!--android:layout_alignParentBottom="true"-->
+		<!--android:layout_alignParentLeft="true"-->
+		<!--android:adjustViewBounds="true"-->
+		<!--android:contentDescription="sexy images"-->
+		<!--android:src="@drawable/merch3" />-->
 
 	<Button
 		android:id="@+id/buyMerchButton"
