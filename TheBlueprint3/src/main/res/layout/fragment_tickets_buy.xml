@@ -8,7 +8,7 @@
 			android:id="@+id/image_view"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:src="@drawable/yankee_stadium"
+			android:src="@drawable/dummy_ticket_detail"
 			android:gravity="top"
 			android:adjustViewBounds="true"
 			/>
