@@ -7,6 +7,7 @@
         <item>Tickets</item>
         <item>Merchandise</item>
         <item>Games</item>
+        <item>Art</item>
     </string-array>
 
     <string name="action_video">Videos</string>
