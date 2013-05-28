@@ -101,8 +101,8 @@ public class MusicFragment extends Fragment {
 			images = new ArrayList<String>(Arrays.asList(getActivity().getAssets().list("art")));
 			iterator = images.iterator();
 			setArtImage();
-			//mHandler.postDelayed(mUpdateTimeTask, 10000);
-			mHandler.postDelayed(mUpdateTimeTask, 2000);
+			mHandler.postDelayed(mUpdateTimeTask, 5000);
+			//mHandler.postDelayed(mUpdateTimeTask, 2000);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
