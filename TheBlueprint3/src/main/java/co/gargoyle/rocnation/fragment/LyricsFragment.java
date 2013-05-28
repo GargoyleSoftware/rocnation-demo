@@ -114,13 +114,15 @@ public class LyricsFragment extends ListFragment {
 	}
 
 	private void showToastWithLyric(Lyric lyric) {
-		Toast newToast = Toast.makeText(getActivity(), lyric.annotation, Toast.LENGTH_LONG);
+		if (lyric.annotation != null && !lyric.annotation.equals("")) {
+			Toast newToast = Toast.makeText(getActivity(), lyric.annotation, Toast.LENGTH_LONG);
 
-		if (mCurrentToast != null) {
-			mCurrentToast.cancel();
+			if (mCurrentToast != null) {
+				mCurrentToast.cancel();
+			}
+			newToast.show();
+			mCurrentToast = newToast;
 		}
-		newToast.show();
-		mCurrentToast = newToast;
 	}
 
 	private void advanceLyricIfNecessary(long millis) {
