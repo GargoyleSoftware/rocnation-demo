@@ -60,7 +60,7 @@ public class MusicFragment extends Fragment {
 	private Button mTitleButton;
 
 	private ImageView mImageViewA;
-	private ImageView mImageViewB;
+	//private ImageView mImageViewB;
 	private Animation myFadeInAnimation;
 	private Animation myFadeOutAnimation;
 
@@ -81,7 +81,7 @@ public class MusicFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.fragment_music, container, false);
 
 		mImageViewA = (ImageView) rootView.findViewById(R.id.image_a);
-		mImageViewB = (ImageView) rootView.findViewById(R.id.image_b);
+//		mImageViewB = (ImageView) rootView.findViewById(R.id.image_b);
 
 		myFadeInAnimation  = AnimationUtils.loadAnimation(getActivity(), R.anim.fadein);
 		myFadeOutAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fadeout);
@@ -218,21 +218,26 @@ public class MusicFragment extends Fragment {
 	}
 
 	private void animateImageViews(Drawable drawable) {
-		if (mImageViewA.getAlpha() == 1.0) {
-			swapImageViews(mImageViewA, mImageViewB, drawable);
-		} else {
-			swapImageViews(mImageViewB, mImageViewA, drawable);
-		}
+		// if (mImageViewA.getAlpha() == 1.0) {
+		// 	swapImageViews(mImageViewA, mImageViewB, drawable);
+		// } else {
+		// 	swapImageViews(mImageViewB, mImageViewA, drawable);
+		// }
+		mImageViewA.setImageDrawable(drawable);
+		mImageViewA.startAnimation(myFadeInAnimation);
 	}
 
-	private void swapImageViews(ImageView oldie, ImageView newbie, Drawable drawable) {
-		newbie.setImageDrawable(drawable);
-
-		oldie.setImageDrawable(drawable);
-
-		oldie.startAnimation(myFadeOutAnimation);
-		newbie.startAnimation(myFadeInAnimation);
-	}
+//	private void swapImageViews(ImageView oldie, ImageView newbie, Drawable drawable) {
+//		// set new guy alpha to 0
+//		//newbie.setAlpha(0);
+//		// set his drawable
+//		newbie.setImageDrawable(drawable);
+//
+//		// Fade out the old guy
+//		//oldie.startAnimation(myFadeOutAnimation);
+//		// Fade in the new guy
+//		newbie.startAnimation(myFadeInAnimation);
+//	}
 
 	////////////////////////////////////////////////////////////
 	// Misc

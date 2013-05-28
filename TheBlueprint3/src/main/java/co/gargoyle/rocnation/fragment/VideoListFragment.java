@@ -33,7 +33,7 @@ public class VideoListFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		View rootView = inflater.inflate(R.layout.fragment_music, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_video_list, container, false);
 
 		getActivity().setTitle("Video");
 
