@@ -22,4 +22,9 @@
     <string name="title_song_detail" >Song Detail</string>
     <string name="no_data_lyrics" >No lyrics available! Please play a song or move to another track.</string>
 
+
+    <string name="notification_title">Concert Alert!</string>
+    <string name="notification_message">Jay-Z is coming to town in July!</string>
+		<string name="notification_short">@string/notification_message</string>
+
 </resources>

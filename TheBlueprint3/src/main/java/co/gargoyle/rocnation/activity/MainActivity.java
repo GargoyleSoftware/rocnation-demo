@@ -114,6 +114,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 
 	@Inject com.squareup.otto.Bus mBus;
 	@Inject MusicFragment mMusicFragment;
+	@Inject TicketsFragment mTicketsFragment;
 	@Inject LyricsFragment mLyricsFragment;
 	@Inject MusicTimeUtilities mMusicTimeUtilities;
 
@@ -401,7 +402,7 @@ public class MainActivity extends FragmentActivity implements TabHost.OnTabChang
 			fragment = new PlanetFragment();
 			break;
 		case 2:
-			fragment = new TicketsFragment();
+			fragment = mTicketsFragment;
 			break;
 		case 3:
 			fragment = new MerchandiseFragment();

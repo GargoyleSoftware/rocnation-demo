@@ -5,6 +5,7 @@ import static android.content.Context.LOCATION_SERVICE;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import android.app.NotificationManager;
 import android.content.Context;
 import android.location.LocationManager;
 import co.gargoyle.rocnation.RocApplication;
@@ -16,6 +17,7 @@ import co.gargoyle.rocnation.model.Video;
 import co.gargoyle.rocnation.service.MusicService;
 
 import com.activeandroid.DatabaseHelper;
+import com.davidykay.energytracker.NotificationHelper;
 import com.squareup.otto.Bus;
 
 import dagger.Module;
@@ -35,11 +37,13 @@ import dagger.Provides;
 public class RocModule {
   private final RocApplication application;
   private final DatabaseHelper databaseHelper;
+  private final NotificationHelper notificationHelper;
   private final Bus bus = new AndroidBus();
 
   public RocModule(RocApplication application) {
 	  this.application = application;
 	  this.databaseHelper = new DatabaseHelper(application);
+	  this.notificationHelper = new NotificationHelper(application, (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE));
   }
 
   /**
@@ -56,6 +60,14 @@ public class RocModule {
 
   @Provides @Singleton Bus provideBus() {
     return bus;
+  }
+
+	@Provides @Singleton NotificationManager provideNotificationManager() {
+		return (NotificationManager) application.getSystemService(Context.NOTIFICATION_SERVICE);
+  }
+
+	@Provides @Singleton NotificationHelper provideNotificationHelper() {
+    return notificationHelper;
   }
 
   @Provides @Singleton DatabaseHelper provideDatabaseHelper() {

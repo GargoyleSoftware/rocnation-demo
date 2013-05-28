@@ -14,7 +14,7 @@
 		/>
 
 	<Button
-		android:id="@+id/purchaseTicketsButton"
+		android:id="@+id/button_tickets_purchase"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"
@@ -26,5 +26,20 @@
 		android:alpha="1.0"
 		android:background="@color/red"
 		/>
+
+	<Button
+		android:id="@+id/button_notify"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentLeft="true"
+		android:layout_alignParentBottom="true"
+		android:layout_marginRight="32dp"
+		android:layout_marginTop="82dp"
+		android:text="Notify Me"
+		android:textSize="12sp"
+		android:alpha="1.0"
+		android:background="@color/red"
+		/>
+
 
 </RelativeLayout>
